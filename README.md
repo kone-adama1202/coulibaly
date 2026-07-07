@@ -35,3 +35,4 @@ Gratuit jusqu'à 100 soumissions/mois.
 - `src/components/Portfolio.jsx` — vos vrais projets une fois réalisés
 - Coordonnées de contact réelles (téléphone, WhatsApp, adresse) à ajouter dans `Footer.jsx` / `Contact.jsx`
 - Nom "WorldDigital" — à confirmer définitivement + vérifier la disponibilité du nom de domaine
+# coulibaly
