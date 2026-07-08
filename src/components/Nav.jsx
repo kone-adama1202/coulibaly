@@ -11,11 +11,42 @@ const LINKS = [
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [activeLink, setActiveLink] = useState(LINKS[0].href); // lien actif par défaut
 
+  // Effet pour le fond de la navbar (scroll)
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Effet pour détecter la section visible (Intersection Observer)
+  useEffect(() => {
+    // On récupère les éléments correspondant aux ancres (sans le '#')
+    const sections = LINKS.map((link) => document.querySelector(link.href));
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Quand une section entre dans la zone visible, on met à jour le lien actif
+            setActiveLink(`#${entry.target.id}`);
+          }
+        });
+      },
+      {
+        threshold: 0.4, // Seuil de 40% de visibilité
+        rootMargin: "-20% 0px -20% 0px", // Ajuste pour éviter les déclenchements trop tôt
+      }
+    );
+
+    // On observe chaque section existante
+    sections.forEach((section) => {
+      if (section) observer.observe(section);
+    });
+
+    // Nettoyage
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -42,13 +73,20 @@ export default function Nav() {
           </span>
         </a>
 
-        {/* Liens desktop avec effet cyan */}
-        <ul className="hidden md:flex items-center gap-10 font-body text-sm font-light tracking-wider text-slate-400">
+        {/* Liens desktop avec soulignement actif */}
+        <ul className="hidden md:flex items-center gap-10 font-body text-sm font-light tracking-wider">
           {LINKS.map((l) => (
             <li key={l.href}>
               <a
                 href={l.href}
-                className="relative after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-cyan-400 after:to-indigo-400 after:transition-all after:duration-300 hover:after:w-full hover:text-slate-100 transition-colors"
+                className={`
+                  relative after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:bg-gradient-to-r after:from-cyan-400 after:to-indigo-400 after:transition-all after:duration-300 hover:after:w-full hover:text-slate-100 transition-colors
+                  ${
+                    activeLink === l.href
+                      ? "after:w-full text-slate-100"
+                      : "after:w-0 text-slate-400"
+                  }
+                `}
               >
                 {l.label}
               </a>
@@ -107,7 +145,7 @@ export default function Nav() {
         </button>
       </nav>
 
-      {/* Menu mobile avec touches indigo et cyan */}
+      {/* Menu mobile avec lien actif en cyan */}
       <div
         className={`
           md:hidden overflow-hidden transition-all duration-500 ease-in-out
@@ -121,7 +159,14 @@ export default function Nav() {
                 <a
                   href={l.href}
                   onClick={() => setOpen(false)}
-                  className="block text-slate-400 hover:text-cyan-400 transition-colors font-light tracking-wide hover:pl-2 duration-200"
+                  className={`
+                    block transition-colors font-light tracking-wide hover:pl-2 duration-200
+                    ${
+                      activeLink === l.href
+                        ? "text-cyan-400"
+                        : "text-slate-400 hover:text-cyan-400"
+                    }
+                  `}
                 >
                   {l.label}
                 </a>
