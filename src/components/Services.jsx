@@ -1,126 +1,136 @@
-import { ReactNode } from "react";
-
-// Icônes minimalistes (SVG) aux accents dorés
-const Icons = {
-  web: (
-    <svg className="w-5 h-5 text-amber-400/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.75v12m-5.25-12h10.5a2.25 2.25 0 012.25 2.25v6a2.25 2.25 0 01-2.25 2.25H6.75a2.25 2.25 0 01-2.25-2.25V9a2.25 2.25 0 012.25-2.25z" />
-    </svg>
-  ),
-  mobile: (
-    <svg className="w-5 h-5 text-amber-400/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.5 19.5h3m-6.75-18h9a1.5 1.5 0 011.5 1.5v16.5a1.5 1.5 0 01-1.5 1.5h-9a1.5 1.5 0 01-1.5-1.5V3a1.5 1.5 0 011.5-1.5z" />
-    </svg>
-  ),
-  support: (
-    <svg className="w-5 h-5 text-amber-400/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-    </svg>
-  ),
-  securite: (
-    <svg className="w-5 h-5 text-amber-400/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-    </svg>
-  ),
-};
+import { useEffect, useRef, useState } from "react";
 
 const SERVICES = [
   {
-    tag: "WEB",
+    n: "01",
     title: "Développement web",
-    desc: "Sites vitrines, plateformes sur mesure et applications web pensées pour vos clients, rapides et faciles à faire évoluer.",
-    items: ["Sites vitrines & e-commerce", "Applications web sur mesure", "Refonte de sites existants"],
-    icon: Icons.web,
+    desc: "Sites vitrines, plateformes sur‑mesure et apps web.",
+    icon: (
+      <path d="M8 9 L3 14 L8 19 M20 9 L25 14 L20 19 M16 6 L12 22" />
+    ),
   },
   {
-    tag: "MOBILE",
-    title: "Développement mobile",
-    desc: "Des applications Android et iOS conçues pour fonctionner même avec une connexion instable, un vrai enjeu au Mali.",
-    items: ["Applications Android & iOS", "Applications hybrides multiplateformes", "Suivi et mises à jour"],
-    icon: Icons.mobile,
+    n: "02",
+    title: "Applications mobiles",
+    desc: "Apps natives ou hybrides, du design au déploiement sur les stores.",
+    icon: (
+      <>
+        <rect x="8" y="3" width="12" height="22" rx="2.5" />
+        <path d="M13 21h2" />
+      </>
+    ),
   },
   {
-    tag: "SUPPORT",
-    title: "Maintenance informatique",
-    desc: "Un support réactif pour garder vos postes, réseaux et outils en état de marche, sur place ou à distance.",
-    items: ["Dépannage sur site & à distance", "Installation et configuration réseau", "Contrats de maintenance mensuels"],
-    icon: Icons.support,
-  },
-  {
-    tag: "SÉCURITÉ",
-    title: "Cybersécurité",
-    desc: "En partenariat avec Cigogne du Mande, nous protégeons vos données et vos systèmes contre les menaces numériques.",
-    items: ["Audit de sécurité", "Sécurisation des systèmes", "Sensibilisation des équipes"],
-    icon: Icons.securite,
-    partner: true,
+    n: "03",
+    title: "Maintenance & support",
+    desc: "Dépannage, entretien préventif, support technique.",
+    icon: (
+      <path d="M18.5 6.5 L21.5 9.5 L14 17 L10 18 L11 14 Z M9 19 L5 23 M6 20 L4 22" />
+    ),
   },
 ];
 
-export default function Services() {
+function ServiceCard({ service, index, visible }) {
   return (
-    <section id="services" className="relative py-28 px-6 bg-slate-950">
+    <div
+      className={`
+        bg-white rounded-2xl p-6 shadow-sm border border-gray-200/60
+        flex flex-col
+        transition-all duration-700 ease-out
+        hover:shadow-md hover:-translate-y-1
+        ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
+      `}
+      style={{ transitionDelay: visible ? `${index * 80}ms` : "0ms" }}
+    >
+      <div className="flex items-center justify-between mb-4">
+        <span className="font-mono text-sm text-gray-400">{service.n}</span>
+        <svg
+          className="w-6 h-6 text-amber-600"
+          viewBox="0 0 28 28"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          {service.icon}
+        </svg>
+      </div>
+      <h3 className="font-display text-xl font-semibold text-gray-800 mb-2">
+        {service.title}
+      </h3>
+      <p className="text-sm text-gray-500 flex-1">{service.desc}</p>
+      <a
+        href="#contact"
+        className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-gray-400 hover:text-amber-600 transition-colors group"
+      >
+        En discuter
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.4"
+          className="w-4 h-4 transition-transform group-hover:translate-x-1"
+        >
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
+    </div>
+  );
+}
+
+export default function Services() {
+  const sectionRef = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      id="services"
+      className="py-16 px-6 sm:px-8 bg-[#f3efe6]"
+    >
       <div className="max-w-6xl mx-auto">
-        {/* En-tête sobre */}
-        <div className="max-w-xl mb-16">
-          <p className="font-mono text-xs text-amber-400/70 mb-3 tracking-widest">Ce qu'on fait</p>
-          <h2 className="font-display text-4xl md:text-5xl text-slate-100 leading-tight">
+        {/* En-tête */}
+        <div className="max-w-xl mb-10">
+          <span className="inline-flex items-center gap-2 font-mono text-xs font-medium uppercase tracking-widest text-gray-500 border border-gray-300/60 rounded-full px-4 py-1.5 bg-white/60">
+            <span className="w-1.5 h-1.5 rounded-full bg-teal-500" />
             Nos services
+          </span>
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-gray-800 mt-4 mb-2">
+            Ce qu'on peut faire <span className="text-amber-600">pour vous</span>.
           </h2>
-          <p className="mt-4 text-slate-300 text-lg">
-            Quatre domaines, un seul objectif : que votre activité tourne mieux grâce au digital.
+          <p className="text-gray-500 text-sm leading-relaxed">
+            Deux profils, un même objectif : rendre le digital accessible et
+            fiable au Mali.
           </p>
         </div>
 
-        {/* Grille de cartes */}
-        <div className="grid sm:grid-cols-2 gap-6">
-          {SERVICES.map((s) => (
-            <div
-              key={s.title}
-              className="group relative rounded-xl border border-slate-700/60 bg-slate-900/50 p-7 transition-all duration-200 hover:border-amber-400/50 hover:bg-slate-900/70"
-            >
-              {/* Badge partenaire */}
-              {s.partner && (
-                <div className="absolute -top-3 right-6">
-                  
-                </div>
-              )}
-
-              {/* En-tête : icône + tag */}
-              <div className="flex items-center gap-3 mb-5">
-                <div className="text-amber-400/80 group-hover:text-amber-400 transition-colors">
-                  {s.icon}
-                </div>
-                <span className="font-mono text-xs tracking-widest text-amber-400/60 group-hover:text-amber-400/90 transition-colors">
-                  {s.tag}
-                </span>
-              </div>
-
-              <h3 className="font-display text-2xl text-slate-100 mb-2 group-hover:text-amber-400 transition-colors">
-                {s.title}
-              </h3>
-              <p className="text-slate-300 text-sm leading-relaxed mb-5">{s.desc}</p>
-
-              <ul className="space-y-2 mb-6">
-                {s.items.map((it) => (
-                  <li key={it} className="flex items-start gap-2 text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
-                    <span className="text-amber-400/70 mt-0.5">→</span>
-                    {it}
-                  </li>
-                ))}
-              </ul>
-
-              {/* Lien d'appel sobre */}
-              <a
-                href="#contact"
-                className="inline-flex items-center gap-2 text-sm font-medium text-amber-400/70 hover:text-amber-400 transition-colors group-hover:gap-3 duration-200"
-              >
-                En savoir plus
-                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-                </svg>
-              </a>
-            </div>
+        {/* Grille */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {SERVICES.map((s, i) => (
+            <ServiceCard
+              key={s.n}
+              service={s}
+              index={i}
+              visible={visible}
+            />
           ))}
         </div>
       </div>

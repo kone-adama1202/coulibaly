@@ -1,103 +1,147 @@
+import { useEffect, useRef, useState } from "react";
+
+// Import des captures d'écran (adapte les chemins selon ton projet)
+import img1 from "../assets/projet1.png";
+import img2 from "../assets/projet2.png";
+import img3 from "../assets/projet3.png";
+
 const PROJECTS = [
   {
-    title: "À venir : votre projet ici",
-    desc: "Nous démarrons tout juste WorldDigital — vos futurs projets prendront place ici, avec captures d'écran et résultats concrets.",
-    tag: "Bientôt",
-    placeholder: true,
+    n: "01",
+    kind: "browser",
+    title: "Kènèya Shop",
+    image: img1,
   },
   {
-    title: "Site vitrine — exemple",
-    desc: "Un exemple de rendu que nous pouvons livrer : présentation d'activité, formulaire de contact, hébergement gratuit inclus.",
-    tag: "Démo",
-    placeholder: false,
+    n: "02",
+    kind: "phone",
+    title: "TransportGo",
+    image: img2,
   },
   {
-    title: "Application mobile — exemple",
-    desc: "Un aperçu du type d'application mobile que nous développons pour la gestion d'activité ou la relation client.",
-    tag: "Démo",
-    placeholder: false,
+    n: "03",
+    kind: "browser",
+    title: "Parc Info Care",
+    image: img3,
   },
 ];
 
-// Icône par défaut pour les projets (modifiable)
-const ProjectIcon = () => (
-  <svg className="w-8 h-8 text-amber-400/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-  </svg>
-);
+// Sous-composant pour gérer l'image (fallback)
+function Shot({ image, title }) {
+  const [broken, setBroken] = useState(false);
+
+  if (broken) {
+    return (
+      <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-gray-400">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          className="w-6 h-6 opacity-60"
+          aria-hidden="true"
+        >
+          <rect x="3" y="4" width="18" height="16" rx="2" />
+          <circle cx="8.5" cy="9.5" r="1.5" />
+          <path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" />
+        </svg>
+        <span className="font-mono text-[10px] tracking-wide">Capture à venir</span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      className="w-full h-full object-contain block"  
+      src={image}
+      alt={`Capture d'écran du projet ${title}`}
+      loading="lazy"
+      onError={() => setBroken(true)}
+    />
+  );
+}
+
+// Carte projet (inchangée)
+function ProjectCard({ project, index, visible }) {
+  return (
+    <div
+      className={`
+        flex flex-col items-center
+        transition-all duration-700 ease-out
+        ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}
+      `}
+      style={{ transitionDelay: visible ? `${index * 90}ms` : "0ms" }}
+    >
+      {project.kind === "browser" ? (
+        <div className="w-full bg-[#1d222f] border border-[#f3efe6]/10 rounded-xl overflow-hidden shadow-2xl transition-transform duration-300 hover:-translate-y-1 hover:border-[#d98a3d]/40">
+          <div className="flex items-center gap-1.5 px-3 py-2 bg-[#161a24] border-b border-[#f3efe6]/10">
+            <span className="w-2 h-2 rounded-full bg-[#f3efe6]/20" />
+            <span className="w-2 h-2 rounded-full bg-[#f3efe6]/20" />
+            <span className="w-2 h-2 rounded-full bg-[#f3efe6]/20" />
+          </div>
+          <div className="aspect-[16/11] bg-[#1d222f]">   {/* fond ajouté */}
+            <Shot image={project.image} title={project.title} />
+          </div>
+        </div>
+      ) : (
+        <div className="relative w-2/3 mx-auto bg-[#1d222f] border-4 border-[#161a24] rounded-[26px] overflow-hidden shadow-2xl transition-transform duration-300 hover:-translate-y-1">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-11 h-3 bg-[#161a24] rounded-b-lg z-10" />
+          <div className="aspect-[9/17.5] bg-[#1d222f]">   {/* fond ajouté */}
+            <Shot image={project.image} title={project.title} />
+          </div>
+        </div>
+      )}
+
+      <div className="flex items-baseline gap-2 mt-4 text-center">
+        <span className="font-mono text-xs text-[#d98a3d]">{project.n}</span>
+        <h3 className="font-display text-base font-semibold text-[#d98a3d]">
+          {project.title}
+        </h3>
+      </div>
+    </div>
+  );
+}
 
 export default function Portfolio() {
+  const sectionRef = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <section id="realisations" className="relative py-28 px-6 bg-slate-950">
+    <section
+      ref={sectionRef}
+      id="portfolio"
+      className="py-16 px-6 sm:px-8 bg-white/5 border-t border-gray-200"
+    >
       <div className="max-w-6xl mx-auto">
-        <div className="max-w-xl mb-16">
-          <p className="font-mono text-xs text-amber-400/70 mb-3 tracking-widest">Nos réalisations</p>
-         
-          <p className="mt-4 text-slate-300 text-lg">
-            Jeune structure, ambition claire. Voici le type de projets que nous livrons —
-            cette section s'enrichira au fil de nos collaborations.
-          </p>
+        <div className="max-w-md mb-10">
+          <span className="inline-flex items-center gap-2 font-mono text-xs font-medium uppercase tracking-widest text-[#f3efe6]/60 border border-[#f3efe6]/10 rounded-full px-4 py-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#6fb7a8]" />
+            Portfolio
+          </span>
+          <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-black mt-4">
+            Trois projets <span className="text-[#d98a3d]">récents</span>.
+          </h2>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {PROJECTS.map((p) => (
-            <div
-              key={p.title}
-              className={`
-                group relative rounded-xl border p-7 flex flex-col justify-between min-h-[240px] transition-all duration-200
-                ${p.placeholder
-                  ? 'border-dashed border-slate-700/40 bg-slate-900/30 hover:border-amber-400/30'
-                  : 'border border-slate-700/60 bg-slate-900/50 hover:border-amber-400/50 hover:bg-slate-900/70'
-                }
-              `}
-            >
-              {/* Icône ou placeholder visuel */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-2 rounded-lg bg-slate-800/50 group-hover:bg-amber-400/10 transition-colors">
-                  <ProjectIcon />
-                </div>
-                <span className={`
-                  font-mono text-[11px] tracking-wider px-3 py-0.5 rounded-full
-                  ${p.placeholder
-                    ? 'text-amber-400/60 border border-amber-400/20 bg-amber-400/5'
-                    : 'text-slate-400 border border-slate-600/40 bg-slate-800/30'
-                  }
-                `}>
-                  {p.tag}
-                </span>
-              </div>
-
-              <div>
-                <h3 className={`
-                  font-display text-xl mb-2 transition-colors
-                  ${p.placeholder
-                    ? 'text-slate-400 group-hover:text-amber-400/70'
-                    : 'text-slate-100 group-hover:text-amber-400'
-                  }
-                `}>
-                  {p.title}
-                </h3>
-                <p className="text-sm text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">
-                  {p.desc}
-                </p>
-              </div>
-
-              {/* Lien "Voir le projet" (pour les démos, on peut le rendre actif plus tard) */}
-              <div className="mt-5 pt-4 border-t border-slate-700/30">
-                <a
-                  href="#contact"
-                  className="inline-flex items-center gap-2 text-sm font-medium text-amber-400/60 hover:text-amber-400 transition-colors group-hover:gap-3 duration-200"
-                >
-                  {p.placeholder ? 'Prochainement' : 'En savoir plus'}
-                  <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-                  </svg>
-                </a>
-              </div>
-
-              {/* Effet de lueur subtil au survol */}
-              <div className="absolute inset-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 bg-gradient-to-br from-amber-400/5 via-transparent to-transparent" />
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {PROJECTS.map((p, i) => (
+            <ProjectCard key={p.n} project={p} index={i} visible={visible} />
           ))}
         </div>
       </div>

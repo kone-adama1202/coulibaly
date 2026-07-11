@@ -9,13 +9,13 @@ import Footer from "./components/Footer";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-ink font-body">
+    <div className="min-h-screen  font-body">
       <Nav />
       <main>
         <Hero />
         <Services />
         <Portfolio />
-        <Partner />
+        {/* <Partner /> */}
         <Team />
         <Contact />
       </main>
