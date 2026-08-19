@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import devImage from "../assets/dev.jpg"; 
+import devImage from "../assets/dev.jpg";
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
@@ -11,14 +11,76 @@ export default function Hero() {
 
   return (
     <section
-      className={`
-        relative overflow-hidden flex items-center
-        pt-28 sm:pt-32 pb-32 px-6 sm:px-8   /* ← padding-top ajouté ici */
-        bg-gradient-to-br from-[#f0ede8] via-[#e8e4dc] to-[#ddd8cf]
-        font-sans
-      `}
-      id="top"
+      className="relative overflow-hidden flex items-center pt-28 sm:pt-32 pb-32 px-6 sm:px-8 bg-gradient-to-br from-[#f0ede8] via-[#e8e4dc] to-[#ddd8cf] font-sans"
+      id="hero"
     >
+      <style>{`
+        :root {
+          --wd-ink: #1e1b17;
+          --wd-amber: #b87c3a;
+          --wd-amber-2: #c68a3e;
+          --wd-amber-3: #a66d2a;
+          --wd-teal: #6fb7a8;
+        }
+
+        /* Grille de points très discrète, pour la texture "digital" */
+        .wd-dot-grid {
+          background-image: radial-gradient(rgba(30,27,23,0.09) 1px, transparent 1px);
+          background-size: 22px 22px;
+          -webkit-mask-image: radial-gradient(ellipse 60% 55% at 78% 45%, black 0%, transparent 72%);
+          mask-image: radial-gradient(ellipse 60% 55% at 78% 45%, black 0%, transparent 72%);
+        }
+
+        @keyframes ping-slow {
+          0%   { transform: scale(1); opacity: 0.6; }
+          80%  { transform: scale(3.2); opacity: 0; }
+          100% { transform: scale(3.2); opacity: 0; }
+        }
+        .wd-ping { animation: ping-slow 2.4s cubic-bezier(0.2, 0.7, 0.4, 1) infinite; }
+
+        @keyframes wd-float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
+        .wd-float { animation: wd-float 5s ease-in-out infinite; }
+
+        @keyframes wd-scroll-cue {
+          0% { transform: translateY(0); opacity: 0.9; }
+          60% { transform: translateY(9px); opacity: 0.2; }
+          61% { transform: translateY(-4px); opacity: 0; }
+          100% { transform: translateY(0); opacity: 0.9; }
+        }
+        .wd-scroll-cue span {
+          animation: wd-scroll-cue 1.8s ease-in-out infinite;
+        }
+
+        .wd-cta-primary {
+          position: relative;
+          overflow: hidden;
+        }
+        .wd-cta-primary::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.35) 40%, transparent 60%);
+          transform: translateX(-120%);
+          transition: transform 0.6s ease;
+        }
+        .wd-cta-primary:hover::before {
+          transform: translateX(120%);
+        }
+        .wd-cta-primary svg {
+          transition: transform 0.3s ease;
+        }
+        .wd-cta-primary:hover svg {
+          transform: translateX(3px);
+        }
+
+        .wd-frame {
+          background: linear-gradient(160deg, var(--wd-amber-2), var(--wd-teal) 130%);
+        }
+      `}</style>
+
       {/* Aura décorative */}
       <div
         className="absolute inset-0 -z-10"
@@ -30,6 +92,7 @@ export default function Hero() {
         }}
         aria-hidden="true"
       />
+      <div className="wd-dot-grid absolute inset-0 -z-10" aria-hidden="true" />
 
       <div className="relative max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-[1fr_0.7fr] gap-10 items-center">
         {/* Contenu gauche */}
@@ -44,7 +107,10 @@ export default function Hero() {
               ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}
             `}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#6fb7a8] shadow-[0_0_0_3px_rgba(111,183,168,0.2)]" />
+            <span className="relative w-1.5 h-1.5 flex-shrink-0">
+              <span className="absolute inset-0 rounded-full bg-[#6fb7a8]" />
+              <span className="absolute inset-0 rounded-full bg-[#6fb7a8] wd-ping" />
+            </span>
             Studio digital — Bamako, Mali
           </span>
 
@@ -83,7 +149,7 @@ export default function Hero() {
             <a
               href="#contact"
               className="
-                inline-flex items-center gap-2
+                wd-cta-primary inline-flex items-center gap-2
                 px-6 py-3 rounded-full
                 font-semibold text-sm
                 text-white bg-gradient-to-br from-[#c68a3e] to-[#a66d2a]
@@ -94,6 +160,9 @@ export default function Hero() {
               "
             >
               Discuter de votre projet
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-3.5 h-3.5">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
             </a>
             <a
               href="#services"
@@ -133,7 +202,7 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Image (taille réduite) */}
+        {/* Image */}
         <div
           className={`
             relative max-w-sm mx-auto w-full
@@ -141,30 +210,78 @@ export default function Hero() {
             ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}
           `}
         >
-          <div className="aspect-[3/4] rounded-2xl overflow-hidden border border-[#1e1b17]/10 bg-[#ddd8cf] shadow-xl">
-            {imgBroken ? (
-              <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-[#3d3a35]/60 bg-gradient-to-b from-[#ddd8cf] to-[#c8c2b6]">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  className="w-8 h-8 opacity-60"
-                  aria-hidden="true"
-                >
-                  <rect x="3" y="4" width="18" height="16" rx="2" />
-                  <circle cx="8.5" cy="9.5" r="1.5" />
-                  <path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" />
-                </svg>
-                <span className="font-mono text-xs">Image à venir</span>
-              </div>
-            ) : (
-              <img src={devImage} alt="WorldDigital" onError={() => setImgBroken(true)} />
-            )}
+          {/* Cadre dégradé façon "bordure encadrée" */}
+          <div className="wd-frame rounded-[1.35rem] p-[3px] shadow-xl">
+            <div className="aspect-[3/4] rounded-[1.15rem] overflow-hidden bg-[#ddd8cf] relative group">
+              {imgBroken ? (
+                <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-[#3d3a35]/60 bg-gradient-to-b from-[#ddd8cf] to-[#c8c2b6]">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    className="w-8 h-8 opacity-60"
+                    aria-hidden="true"
+                  >
+                    <rect x="3" y="4" width="18" height="16" rx="2" />
+                    <circle cx="8.5" cy="9.5" r="1.5" />
+                    <path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" />
+                  </svg>
+                  <span className="font-mono text-xs">Image à venir</span>
+                </div>
+              ) : (
+                <img
+                  src={devImage}
+                  alt="Équipe WorldDigital au travail"
+                  onError={() => setImgBroken(true)}
+                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
+            </div>
           </div>
 
-        
+          {/* Coins décoratifs, effet "cadre photo" */}
+          <span className="absolute -top-3 -left-3 w-6 h-6 border-t-2 border-l-2 border-[#b87c3a]/50 rounded-tl-md" aria-hidden="true" />
+          <span className="absolute -bottom-3 -right-3 w-6 h-6 border-b-2 border-r-2 border-[#6fb7a8]/50 rounded-br-md" aria-hidden="true" />
+
+          {/* Carte flottante */}
+          <div
+            className={`
+              wd-float absolute -bottom-6 -left-6 sm:-left-10
+              bg-white/90 backdrop-blur-md border border-[#1e1b17]/8
+              rounded-2xl shadow-lg px-4 py-3
+              flex items-center gap-3
+              transition-all duration-700 ease-out delay-500
+              ${mounted ? "opacity-100 scale-100" : "opacity-0 scale-90"}
+            `}
+          >
+            <span className="w-9 h-9 rounded-full bg-gradient-to-br from-[#c68a3e] to-[#a66d2a] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+              WD
+            </span>
+            <div className="leading-tight">
+              <p className="font-semibold text-sm text-[#1e1b17]">2 fondateurs</p>
+              <p className="font-mono text-[11px] text-[#3d3a35]/60">basés à Bamako</p>
+            </div>
+          </div>
         </div>
+      </div>
+
+      {/* Repère de scroll */}
+      <div
+        className={`
+          wd-scroll-cue absolute bottom-8 left-1/2 -translate-x-1/2
+          hidden sm:flex flex-col items-center gap-2
+          text-[#3d3a35]/50
+          transition-opacity duration-700 delay-700
+          ${mounted ? "opacity-100" : "opacity-0"}
+        `}
+        aria-hidden="true"
+      >
+        <span className="font-mono text-[10px] uppercase tracking-widest">Découvrir</span>
+        <span className="w-5 h-8 rounded-full border border-[#3d3a35]/30 flex justify-center pt-1.5">
+          <span className="w-1 h-1.5 rounded-full bg-[#b87c3a] block" />
+        </span>
       </div>
     </section>
   );

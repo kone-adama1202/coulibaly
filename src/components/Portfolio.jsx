@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 // Import des captures d'écran (adapte les chemins selon ton projet)
-import img1 from "../assets/projet1.png";
+import img1 from "../assets/projet4.png";
 import img2 from "../assets/projet2.png";
 import img3 from "../assets/projet3.png";
 
@@ -9,7 +9,7 @@ const PROJECTS = [
   {
     n: "01",
     kind: "browser",
-    title: "Kènèya Shop",
+    title: "recyclage-info",
     image: img1,
   },
   {

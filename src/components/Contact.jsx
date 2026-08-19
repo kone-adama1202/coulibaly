@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
 
 const CONTACT_INFO = [
   { label: "Email", value: "contact@worlddigital.ml", href: "mailto:contact@worlddigital.ml" },
@@ -6,11 +7,17 @@ const CONTACT_INFO = [
   { label: "Localisation", value: "Bamako, Mali", href: null },
 ];
 
+// Identifiants EmailJS : à définir dans un fichier .env à la racine du projet
+// (voir .env.example). Jamais commités dans Git.
+const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
 export default function Contact() {
   const sectionRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -31,10 +38,23 @@ export default function Contact() {
   const handleChange = (field) => (e) =>
     setForm((f) => ({ ...f, [field]: e.target.value }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.message) return;
-    setSubmitted(true);
+
+    setStatus("sending");
+    try {
+      await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_ID,
+        { name: form.name, email: form.email, message: form.message },
+        { publicKey: PUBLIC_KEY }
+      );
+      setStatus("sent");
+    } catch (err) {
+      console.error("Erreur EmailJS:", err);
+      setStatus("error");
+    }
   };
 
   return (
@@ -85,7 +105,7 @@ export default function Contact() {
         </div>
 
         {/* Colonne droite : formulaire */}
-        {submitted ? (
+        {status === "sent" ? (
           <div className="bg-white rounded-xl border border-gray-200/80 p-8 flex flex-col items-center justify-center min-h-[320px] text-center shadow-sm">
             <svg
               viewBox="0 0 24 24"
@@ -117,6 +137,7 @@ export default function Contact() {
               <input
                 id="wd-name"
                 type="text"
+                name="name"
                 placeholder="Votre nom"
                 value={form.name}
                 onChange={handleChange("name")}
@@ -132,6 +153,7 @@ export default function Contact() {
               <input
                 id="wd-email"
                 type="email"
+                name="email"
                 placeholder="vous@exemple.com"
                 value={form.email}
                 onChange={handleChange("email")}
@@ -146,6 +168,7 @@ export default function Contact() {
               </label>
               <textarea
                 id="wd-message"
+                name="message"
                 rows={5}
                 placeholder="Parlez-nous de votre projet…"
                 value={form.message}
@@ -157,13 +180,20 @@ export default function Contact() {
 
             <button
               type="submit"
-              className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-br from-amber-500 to-amber-600 text-white font-semibold text-sm rounded-full px-6 py-3 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+              disabled={status === "sending"}
+              className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-br from-amber-500 to-amber-600 text-white font-semibold text-sm rounded-full px-6 py-3 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 disabled:opacity-60"
             >
-              Envoyer le message
+              {status === "sending" ? "Envoi en cours…" : "Envoyer le message"}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="w-4 h-4">
                 <path d="M5 12h14M13 6l6 6-6 6" />
               </svg>
             </button>
+
+            {status === "error" && (
+              <p className="text-sm text-red-500 text-center">
+                Une erreur est survenue. Réessayez ou écrivez-nous directement par email.
+              </p>
+            )}
           </form>
         )}
       </div>
