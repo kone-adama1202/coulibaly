@@ -6,8 +6,6 @@ const CONTACT_INFO = [
   { label: "WhatsApp", value: "+223 00 00 00 00", href: "https://wa.me/22300000000" },
   { label: "Localisation", value: "Bamako, Mali", href: null },
 ];
-
-// Identifiants EmailJS : à définir dans un fichier .env à la racine du projet
 // (voir .env.example). Jamais commités dans Git.
 const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
 const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
@@ -40,17 +38,32 @@ export default function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     if (!form.name || !form.email || !form.message) return;
-
+  
     setStatus("sending");
+  
     try {
       await emailjs.send(
         SERVICE_ID,
         TEMPLATE_ID,
-        { name: form.name, email: form.email, message: form.message },
-        { publicKey: PUBLIC_KEY }
+        {
+          name: form.name,
+          email: form.email,
+          message: form.message,
+        },
+        {
+          publicKey: PUBLIC_KEY,
+        }
       );
+  
       setStatus("sent");
+  
+      // Recharge la page après 2 secondes
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+  
     } catch (err) {
       console.error("Erreur EmailJS:", err);
       setStatus("error");
