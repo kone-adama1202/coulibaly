@@ -5,6 +5,7 @@ const LINKS = [
   { label: "Services", href: "#services" },
   { label: "Équipe", href: "#equipe" },
   { label: "Contact", href: "#contact" },
+
 ];
 
 export default function Nav({ darkMode, setDarkMode }) {
