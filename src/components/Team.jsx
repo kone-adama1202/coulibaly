@@ -6,8 +6,8 @@ import founder2 from "../assets/adama.jpg";
 
 const TEAM = [
   {
-    name: "Fondateur 1",
-    role: "Cofondateur — Développement",
+    name: "Adama KONE",
+    role: "developpeur web & mobile",
     photo: founder1,
   },
   {
@@ -236,16 +236,8 @@ export default function Team() {
               duration-500
             "
           >
-            Deux jeunes,{" "}
-            <span
-              className="
-                text-amber-600
-                dark:text-amber-400
-              "
-            >
-              un même objectif
-            </span>
-            .
+           
+            
           </h2>
 
           {/* DESCRIPTION */}
@@ -424,7 +416,7 @@ export default function Team() {
           >
             <span className="w-10 h-px bg-gray-300 dark:bg-slate-700" />
 
-            WorldDigital
+           SiraSolf
 
             <span className="w-10 h-px bg-gray-300 dark:bg-slate-700" />
           </div>

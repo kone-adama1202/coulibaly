@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 
 const CONTACT_INFO = [
-  { label: "Email", value: "contact@worlddigital.ml", href: "mailto:contact@worlddigital.ml" },
-  { label: "WhatsApp", value: "+223 00 00 00 00", href: "https://wa.me/22300000000" },
+  { label: "Email", value: "contact@SiraSolf.com", href: "mailto:contact@SiraSolf.com" },
+  { label: "WhatsApp", value: "+223 92 39 75 18", href: "https://wa.me/22300000000" },
   { label: "Localisation", value: "Bamako, Mali", href: null },
 ];
 // (voir .env.example). Jamais commités dans Git.

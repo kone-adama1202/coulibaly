@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 const LINKS = [
   { label: "Accueil", href: "#hero" },
   { label: "Services", href: "#services" },
+  
   { label: "Équipe", href: "#equipe" },
   { label: "Contact", href: "#contact" },
 
@@ -225,9 +226,9 @@ export default function Nav({ darkMode, setDarkMode }) {
             </span>
 
             <span className="font-['Space_Grotesk'] text-lg font-semibold tracking-tight">
-              World
+              Sira
               <span className="text-[#b87c3a]">
-                Digital
+                Solf
               </span>
             </span>
           </a>
