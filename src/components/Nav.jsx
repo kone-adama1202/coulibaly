@@ -3,10 +3,9 @@ import { useEffect, useState, useRef } from "react";
 const LINKS = [
   { label: "Accueil", href: "#hero" },
   { label: "Services", href: "#services" },
-  
+  { label: "Réalisations", href: "#portfolio" }, // 👈 Nouveau label
   { label: "Équipe", href: "#equipe" },
   { label: "Contact", href: "#contact" },
-
 ];
 
 export default function Nav({ darkMode, setDarkMode }) {
