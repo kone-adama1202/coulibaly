@@ -7,10 +7,10 @@ import { useEffect, useRef, useState } from "react";
 const PROJECTS = [
   {
     n: "01",
-    title: "Recyclage Info",
+    title: "Cosméthique",
     description:
-      "Plateforme d'information et de sensibilisation au recyclage.",
-    url: "https://finalrecycl-production.up.railway.app/",
+      "Application web pour la vente de produits cosmétiques",
+    url: "https://cosmethique.vercel.app/",
   },
   {
     n: "02",
