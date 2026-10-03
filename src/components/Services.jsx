@@ -1,334 +1,180 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import { useLanguage } from "../context/LanguageContext";
 
-const SERVICES = [
-  {
-    title: "Développement web",
-    desc: "Sites vitrines, plateformes sur-mesure et applications web pensées pour vos clients.",
-    icon: <path d="M8 9 L3 14 L8 19 M20 9 L25 14 L20 19 M16 6 L12 22" />,
-  },
-  {
-    title: "Applications mobiles",
-    desc: "Apps natives ou hybrides, du design au déploiement sur les stores, pensées pour une connexion instable.",
-    icon: (
-      <>
-        <rect x="8" y="3" width="12" height="22" rx="2.5" />
-        <path d="M13 21h2" />
-      </>
-    ),
-  },
-  {
-    title: "Maintenance & support",
-    desc: "Dépannage sur site et à distance, entretien préventif, contrats de support mensuels.",
-    icon: (
-      <path d="M18.5 6.5 L21.5 9.5 L14 17 L10 18 L11 14 Z M9 19 L5 23 M6 20 L4 22" />
-    ),
-  },
-  // {
-  //   title: "Cybersécurité",
-  //   desc: "Audit, sécurisation de vos systèmes et sensibilisation de vos équipes.",
-  //   icon: (
-  //     <>
-  //       <path d="M14 3 L23 7 V13 C23 19 19 23.5 14 25 C9 23.5 5 19 5 13 V7 Z" />
-  //       <path d="M10.5 14 L13 16.5 L18 11" />
-  //     </>
-  //   ),
-  //   partner: "Avec Cigogne du Mande",
-  // },
-  {
-    title: "Réseaux & infrastructure",
-    desc: "Installation et configuration de réseaux d'entreprise, serveurs, Wi-Fi et câblage.",
-    icon: (
-      <>
-        <circle cx="14" cy="6" r="2.3" />
-        <circle cx="6" cy="20" r="2.3" />
-        <circle cx="22" cy="20" r="2.3" />
-        <path d="M14 8.3 V13 M14 13 L7.4 18.2 M14 13 L20.6 18.2" />
-      </>
-    ),
-  },
-  {
-    title: "Conseil & accompagnement",
-    desc: "Audit digital, stratégie technologique et formation de vos équipes aux outils numériques.",
-    icon: (
-      <>
-        <circle cx="14" cy="14" r="10.5" />
-        <path d="M18 10 L15.2 15.2 L10 18 L12.8 12.8 Z" />
-      </>
-    ),
-  },
+const SERVICE_ICONS = [
+  // Web
+  <path key="web" d="M8 9 L3 14 L8 19 M20 9 L25 14 L20 19 M16 6 L12 22" />,
+  // Mobile
+  <g key="mobile">
+    <rect x="8" y="3" width="12" height="22" rx="2.5" />
+    <path d="M13 21h2" />
+  </g>,
+  // Maintenance
+  <path
+    key="maint"
+    d="M18.5 6.5 L21.5 9.5 L14 17 L10 18 L11 14 Z M9 19 L5 23 M6 20 L4 22"
+  />,
+  // Réseaux
+  <g key="net">
+    <circle cx="14" cy="6" r="2.3" />
+    <circle cx="6" cy="20" r="2.3" />
+    <circle cx="22" cy="20" r="2.3" />
+    <path d="M14 8.3 V13 M14 13 L7.4 18.2 M14 13 L20.6 18.2" />
+  </g>,
+  // IA
+  <g key="ai">
+    <path d="M14 3 C14 8.5 18.5 13 24 13 C18.5 13 14 17.5 14 23 C14 17.5 9.5 13 4 13 C9.5 13 14 8.5 14 3 Z" />
+    <path d="M6 4 C6 5.5 7.2 6.7 8.7 6.7 C7.2 6.7 6 7.9 6 9.4 C6 7.9 4.8 6.7 3.3 6.7 C4.8 6.7 6 5.5 6 4 Z" />
+  </g>,
 ];
 
-function ServiceCard({ service, index, visible }) {
+const SERVICE_FEATURES = {
+  fr: [
+    ["Sites vitrines & E-commerce", "Performance & SEO optimisés", "Design responsive sur-mesure", "Technologies React / Next.js"],
+    ["Applications iOS & Android", "Mode hors-ligne (Offline-first)", "Interface UI/UX intuitive", "Déploiement App Store & Play Store"],
+    ["Dépannage rapide & sécurisé", "Sauvegardes automatisées", "Contrats de maintenance mensuels", "Support technique disponible 7j/7"],
+    ["Câblage & baie de brassage", "Configuration Wi-Fi sécurisé", "Serveurs locaux & Cloud", "Pare-feu & protection du réseau"],
+    ["Intégration d'IA & Chatbots intelligents", "Automatisation des processus métier", "Stratégie de transformation digitale", "Formation de vos équipes aux outils d'IA"],
+  ],
+  en: [
+    ["Showcase & E-commerce websites", "Optimized SEO & Performance", "Custom responsive design", "Modern Next.js / React stack"],
+    ["iOS & Android mobile apps", "Offline-first capabilities", "Intuitive UX/UI design", "Play Store & App Store release"],
+    ["Fast & secure troubleshooting", "Automated regular backups", "Monthly support contracts", "Dedicated 7/7 technical assistance"],
+    ["Structured cabling & racks", "Enterprise Wi-Fi security", "Local servers & Cloud storage", "Firewall & network perimeter protection"],
+    ["AI Integration & Smart Chatbots", "Business process automation", "Digital & AI strategic audit", "Staff training on modern AI tools"],
+  ],
+};
+
+function Icon({ index, className }) {
   return (
-    <a
-      href="#contact"
-      aria-label={`En savoir plus sur : ${service.title}`}
-      className={`
-        group relative flex flex-col
-        p-6 sm:p-7
-
-        bg-white/70
-        dark:bg-white/[0.03]
-
-        border border-gray-300/50
-        dark:border-white/10
-
-        rounded-2xl
-
-        backdrop-blur-sm
-
-        transition-all duration-700 ease-out
-
-        hover:-translate-y-1.5
-        hover:border-amber-500/50
-        hover:bg-white
-        dark:hover:bg-white/[0.06]
-        hover:shadow-[0_20px_50px_-20px_rgba(217,138,61,0.35)]
-
-        focus:outline-none
-        focus-visible:ring-2
-        focus-visible:ring-amber-500/60
-
-        ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
-      `}
-      style={{
-        transitionDelay: visible ? `${index * 80}ms` : "0ms",
-      }}
+    <svg
+      className={className}
+      viewBox="0 0 28 28"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
     >
-      {/* Halo décoratif au hover */}
-      <span
-        aria-hidden="true"
-        className="
-          pointer-events-none absolute inset-0 rounded-2xl
-          bg-gradient-to-br from-amber-500/0 via-amber-500/0 to-amber-500/0
-          group-hover:from-amber-500/[0.06]
-          group-hover:to-teal-500/[0.05]
-          transition-all duration-500
-        "
-      />
-
-      {/* ICÔNE */}
-      <span
-        className="
-          relative
-          flex items-center justify-center
-          w-12 h-12
-
-          rounded-xl
-
-          border
-
-          bg-transparent
-
-          border-gray-300/70
-          dark:border-white/15
-
-          text-amber-600
-          dark:text-amber-500
-
-          transition-all duration-300
-
-          group-hover:bg-amber-600
-          group-hover:border-amber-600
-          group-hover:text-white
-          group-hover:scale-105
-        "
-      >
-        <svg
-          className="w-6 h-6"
-          viewBox="0 0 28 28"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          {service.icon}
-        </svg>
-      </span>
-
-      {/* TITRE + PARTENAIRE */}
-      <div className="relative mt-5 flex items-center flex-wrap gap-2.5">
-        <h3
-          className="
-            font-display
-            text-lg sm:text-xl
-            font-semibold
-            text-gray-800 dark:text-white
-
-            transition-colors duration-300
-            group-hover:text-amber-700
-            dark:group-hover:text-amber-400
-          "
-        >
-          {service.title}
-        </h3>
-
-        {service.partner && (
-          <span
-            className="
-              font-mono text-[10px] uppercase tracking-wide
-              text-teal-600 dark:text-teal-400
-              border border-teal-500/40 dark:border-teal-400/30
-              bg-teal-50/40 dark:bg-teal-400/5
-              rounded-full px-2.5 py-0.5
-              whitespace-nowrap
-            "
-          >
-            {service.partner}
-          </span>
-        )}
-      </div>
-
-      {/* DESCRIPTION */}
-      <p
-        className="
-          relative
-          mt-2.5
-          text-sm
-          leading-relaxed
-          text-gray-500 dark:text-gray-400
-        "
-      >
-        {service.desc}
-      </p>
-
-      {/* CTA */}
-      <span
-        className="
-          relative
-          mt-5 inline-flex items-center gap-1.5
-          font-mono text-[11px] uppercase tracking-widest
-
-          text-gray-400 dark:text-gray-500
-
-          transition-all duration-300
-
-          group-hover:text-amber-600
-          dark:group-hover:text-amber-400
-        "
-      >
-        En savoir plus
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.2"
-          className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1"
-          aria-hidden="true"
-        >
-          <path d="M5 12h14M13 6l6 6-6 6" />
-        </svg>
-      </span>
-
-      {/* Petit numéro décoratif en haut à droite */}
-      <span
-        aria-hidden="true"
-        className="
-          absolute top-5 right-5
-          font-mono text-[10px] tracking-widest
-          text-gray-300 dark:text-white/15
-          transition-colors duration-300
-          group-hover:text-amber-500/60
-        "
-      >
-        {String(index + 1).padStart(2, "0")}
-      </span>
-    </a>
+      {SERVICE_ICONS[index]}
+    </svg>
   );
 }
 
 export default function Services() {
-  const sectionRef = useRef(null);
-  const [visible, setVisible] = useState(false);
+  const { lang, t } = useLanguage();
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          obs.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
+  const services = t.services.items;
+  const active = services[activeIndex] || services[0];
+  const features =
+    (SERVICE_FEATURES[lang] || SERVICE_FEATURES.fr)[activeIndex] || [];
 
   return (
     <section
-      ref={sectionRef}
       id="services"
-      className="
-        py-20 px-6 sm:px-8
-        bg-[#f3efe6] dark:bg-gray-950
-        transition-colors duration-500
-      "
+      className="py-20 px-6 sm:px-8 bg-[#f5f2eb] dark:bg-[#0b0c10] transition-colors duration-300"
     >
       <div className="max-w-6xl mx-auto">
-
-        {/* EN-TÊTE */}
-        <div className="max-w-xl mb-12">
-          <span
-            className="
-              inline-flex items-center gap-2
-              font-mono text-xs font-medium uppercase tracking-widest
-
-              text-gray-500 dark:text-gray-400
-
-              border border-gray-300/60 dark:border-white/10
-              rounded-full px-4 py-1.5
-              bg-white/60 dark:bg-white/5
-              backdrop-blur-sm
-            "
-          >
-            <span
-              className="
-                w-1.5 h-1.5 rounded-full bg-teal-500
-                shadow-[0_0_10px_rgba(111,183,168,0.5)]
-              "
-            />
-            Nos services
-          </span>
-
-          <h2
-            className="
-              font-display
-              text-3xl sm:text-4xl
-              font-bold tracking-tight
-              text-gray-800 dark:text-white
-              mt-4 mb-3
-            "
-          >
-            Ce qu'on peut faire{" "}
-            <span className="text-amber-600 dark:text-amber-500">
-              pour vous
-            </span>
-            .
+        {/* En-tête */}
+        <div className="max-w-2xl mb-12">
+          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold tracking-tight text-neutral-900 dark:text-white">
+            {t.services.titleStart}
+            <span className="text-[#c68a3e]">{t.services.titleHighlight}</span>
+            {t.services.titleEnd}
           </h2>
-
-          <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-            Cinq domaines, un même objectif : rendre le digital
-            accessible et fiable au Mali.
+          <p className="mt-3 text-base leading-relaxed text-neutral-600 dark:text-neutral-400">
+            {t.services.description}
           </p>
         </div>
 
-        {/* GRILLE */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-          {SERVICES.map((service, index) => (
-            <ServiceCard
-              key={service.title}
-              service={service}
-              index={index}
-              visible={visible}
-            />
-          ))}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10">
+          {/* Liste des services */}
+          <div
+            role="tablist"
+            aria-orientation="vertical"
+            className="lg:col-span-5 flex flex-col gap-2"
+          >
+            {services.map((item, index) => {
+              const isActive = index === activeIndex;
+              return (
+                <button
+                  key={item.title}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => setActiveIndex(index)}
+                  className={`
+                    flex items-center gap-4 w-full text-left px-4 py-3.5 rounded-xl
+                    border transition-colors duration-200
+                    focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c68a3e]
+                    ${
+                      isActive
+                        ? "bg-white dark:bg-white/[0.06] border-[#c68a3e]"
+                        : "border-transparent hover:bg-white/60 dark:hover:bg-white/[0.03]"
+                    }
+                  `}
+                >
+                  <Icon
+                    index={index}
+                    className={`w-6 h-6 flex-shrink-0 ${
+                      isActive ? "text-[#c68a3e]" : "text-neutral-400 dark:text-neutral-500"
+                    }`}
+                  />
+                  <span
+                    className={`font-['Space_Grotesk'] text-base font-semibold ${
+                      isActive
+                        ? "text-neutral-900 dark:text-white"
+                        : "text-neutral-600 dark:text-neutral-400"
+                    }`}
+                  >
+                    {item.title}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Détail du service */}
+          <div
+            role="tabpanel"
+            className="lg:col-span-7 rounded-2xl p-8 sm:p-10 bg-white dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08]"
+          >
+            <Icon index={activeIndex} className="w-9 h-9 text-[#c68a3e]" />
+
+            <h3 className="mt-5 font-['Space_Grotesk'] text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white">
+              {active.title}
+            </h3>
+
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-neutral-600 dark:text-neutral-300">
+              {active.desc}
+            </p>
+
+            <ul className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+              {features.map((feat) => (
+                <li
+                  key={feat}
+                  className="flex items-start gap-2.5 text-sm text-neutral-700 dark:text-neutral-300"
+                >
+                  <span className="text-[#6fb7a8] font-bold leading-5">✓</span>
+                  <span>{feat}</span>
+                </li>
+              ))}
+            </ul>
+
+            <a
+              href="#contact"
+              className="
+                inline-block mt-10 px-6 py-3 rounded-full
+                text-sm font-semibold text-white bg-[#c68a3e]
+                hover:bg-[#a66d2a] transition-colors duration-200
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#c68a3e]
+              "
+            >
+              {lang === "fr" ? "Démarrer ce projet" : "Start this project"}
+            </a>
+          </div>
         </div>
       </div>
     </section>

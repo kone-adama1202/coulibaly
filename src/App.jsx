@@ -1,4 +1,6 @@
+// App.jsx
 import { useEffect, useState } from "react";
+import { LanguageProvider } from "./context/LanguageContext";
 
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
@@ -29,35 +31,32 @@ export default function App() {
   }, [darkMode]);
 
   return (
-    <div
-      className="
-        min-h-screen
-        font-body
-        bg-[#f5f2eb]
-        text-gray-800
-        dark:bg-gray-950
-        dark:text-gray-100
-        transition-colors
-        duration-300
-      "
-    >
-      <Nav
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
-      />
+    <LanguageProvider>
+      <div
+        className="
+          min-h-screen
+          font-body
+          bg-[#f5f2eb]
+          text-gray-800
+          dark:bg-gray-950
+          dark:text-gray-100
+          transition-colors
+          duration-300
+        "
+      >
+        <Nav darkMode={darkMode} setDarkMode={setDarkMode} />
 
-      <main>
-        <Hero />
-        <Services />
+        <main>
+          <Hero />
+          <Services />
+          <Portfolio />
+          {/* <Partner /> */}
+          <Team />
+          <Contact />
+        </main>
 
-        <Portfolio />
-        {/* <Partner /> */}
-
-        <Team />
-        <Contact />
-      </main>
-
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </LanguageProvider>
   );
 }

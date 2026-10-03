@@ -1,5 +1,5 @@
 import { useState } from "react";
-import partnerLogo from "../assets/cyber.png"; // adapte le chemin selon ton projet
+import partnerLogo from "../assets/cigogne.png"; // adapte le chemin selon ton projet
 
 const PARTNER = {
   name: "Cigogne du mande",
