@@ -1,102 +1,87 @@
+
 import { useLanguage } from "../context/LanguageContext";
 
 const PROJECTS_DATA = {
   fr: [
     {
-      id: "01",
+      id: "cosmethique",
       title: "Cosméthique",
-      category: "E-Commerce & Beauté",
+      category: "E-commerce · Beauté",
       description:
-        "Plateforme web moderne dédiée à la vente de produits cosmétiques naturels avec expérience d'achat fluide.",
+        "Boutique en ligne spécialisée dans la vente de produits cosmétiques naturels, avec un parcours d'achat simple.",
       url: "https://cosmethique.vercel.app/",
     },
     {
-      id: "02",
+      id: "africa-transit",
       title: "Africa Transit Express",
-      category: "Transport & Réservation",
+      category: "Transport · Réservation",
       description:
-        "Application web de réservation et de suivi de voyages interurbains optimisée pour le contexte africain.",
+        "Application web dédiée à la réservation et à l'organisation des voyages interurbains.",
       url: "https://mamadou6455.github.io/Africa-transit-express/",
     },
     {
-      id: "03",
-      title: "Gestion de Parc Informatique",
-      category: "SaaS & Infrastructure",
+      id: "bambarashop",
+      title: "BambaraShop",
+      category: "E-commerce · Boutique en ligne",
       description:
-        "Système complet de suivi du matériel IT avec tableaux de bord analytiques et authentification sécurisée.",
-      url: "https://mamadou6455.github.io/quiz_reseau-v3/",
+        "Site de vente en ligne avec des fonctionnalités de gestion des produits, des stocks et des commandes.",
+      url: "https://bambarashop.netlify.app/",
     },
   ],
+
   en: [
     {
-      id: "01",
+      id: "cosmethique",
       title: "Cosméthique",
-      category: "E-Commerce & Beauty",
+      category: "E-commerce · Beauty",
       description:
-        "Modern digital storefront for organic cosmetic products with a seamless, responsive checkout experience.",
+        "Online store specializing in natural cosmetics, with a straightforward shopping experience.",
       url: "https://cosmethique.vercel.app/",
     },
     {
-      id: "02",
+      id: "africa-transit",
       title: "Africa Transit Express",
-      category: "Travel & Ticketing",
+      category: "Transport · Booking",
       description:
-        "Intercity booking and journey scheduling web application optimized for fast loading and mobile users.",
+        "Web application for booking and organizing intercity journeys.",
       url: "https://mamadou6455.github.io/Africa-transit-express/",
     },
     {
-      id: "03",
-      title: "IT Asset Management",
-      category: "SaaS & Enterprise",
+      id: "bambarashop",
+      title: "BambaraShop",
+      category: "E-commerce · Online store",
       description:
-        "Centralized hardware tracking platform featuring role-based authentication and real-time maintenance logs.",
-      url: "https://mamadou6455.github.io/quiz_reseau-v3/",
+        "Online shop with product, stock and order management features.",
+      url: "https://bambarashop.netlify.app/",
     },
   ],
 };
 
 function ProjectCard({ project, visitText }) {
   return (
-    <a
-      href={project.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="
-        group flex flex-col p-7 rounded-2xl
-        bg-white dark:bg-white/[0.04]
-        border border-black/[0.06] dark:border-white/[0.08]
-        hover:border-[#c68a3e] transition-colors duration-200
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c68a3e]
-      "
-    >
-      <span className="text-sm font-medium text-[#c68a3e]">
+    <article className="flex flex-col border-t border-neutral-300 py-6 dark:border-neutral-700">
+      <p className="text-sm text-neutral-500 dark:text-neutral-400">
         {project.category}
-      </span>
+      </p>
 
-      <h3 className="mt-2 font-['Space_Grotesk'] text-2xl font-bold text-neutral-900 dark:text-white">
+      <h3 className="mt-3 text-xl font-semibold text-neutral-900 dark:text-white">
         {project.title}
       </h3>
 
-      <p className="mt-3 flex-grow text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
+      <p className="mt-3 flex-1 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
         {project.description}
       </p>
 
-      <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-neutral-900 dark:text-white group-hover:text-[#c68a3e] transition-colors">
+      <a
+        href={project.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-5 inline-flex w-fit items-center gap-2 text-sm font-medium text-[#a66d2a] underline decoration-transparent underline-offset-4 hover:decoration-current focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c68a3e] dark:text-[#d9a15e]"
+      >
         {visitText}
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="w-4 h-4"
-          aria-hidden="true"
-        >
-          <path d="M7 17L17 7M17 7H7M17 7V17" />
-        </svg>
-      </span>
-    </a>
+        <span aria-hidden="true">↗</span>
+      </a>
+    </article>
   );
 }
 
@@ -107,26 +92,32 @@ export default function Portfolio() {
   return (
     <section
       id="portfolio"
-      className="py-20 px-6 sm:px-8 bg-[#f8f6f0] dark:bg-[#0c0d12] transition-colors duration-300"
+      className="bg-[#f8f6f0] px-6 py-20 text-neutral-900 dark:bg-[#0c0d12] dark:text-white sm:px-8 lg:py-24"
     >
-      <div className="max-w-6xl mx-auto">
-        <div className="max-w-2xl mb-12">
-          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold tracking-tight text-neutral-900 dark:text-white">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-12 max-w-2xl">
+          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
             {t.portfolio.titleStart}
-            <span className="text-[#c68a3e]">{t.portfolio.titleHighlight}</span>
+            <span className="text-[#c68a3e]">
+              {t.portfolio.titleHighlight}
+            </span>
             {t.portfolio.titleEnd}
           </h2>
-          <p className="mt-3 text-base leading-relaxed text-neutral-600 dark:text-neutral-400">
+
+          <p className="mt-4 text-base leading-7 text-neutral-600 dark:text-neutral-400">
             {t.portfolio.description}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-x-10 md:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => (
             <ProjectCard
               key={project.id}
               project={project}
-              visitText={t.portfolio.visitCTA || "Visiter"}
+              visitText={
+                t.portfolio.visitCTA ||
+                (lang === "fr" ? "Visiter le site" : "Visit website")
+              }
             />
           ))}
         </div>

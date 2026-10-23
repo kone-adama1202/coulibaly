@@ -71,10 +71,10 @@ export default function Team() {
 
   const members = t.team.members || [
     { name: "Adama KONE", role: "Développeur logiciel" },
-    { name: "Fondateur 2", role: "Cofondateur — Design & Mobile" },
+    { name: "Mamadou Bakary Coulibaly ", role: "Ingénieur Réseaux & systèmes et Designers " },
   ];
 
-  return (
+  return (   
     <section
       ref={sectionRef}
       id="equipe"
@@ -165,7 +165,7 @@ export default function Team() {
         <div className="flex justify-center mt-16">
           <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-widest text-neutral-400 dark:text-neutral-600">
             <span className="w-8 h-px bg-neutral-300 dark:bg-neutral-800" />
-            <span>{t.team.signature || "SiraSolf"}</span>
+            <span>{t.team.signature || "Nienta Digital"}</span>
             <span className="w-8 h-px bg-neutral-300 dark:bg-neutral-800" />
           </div>
         </div>

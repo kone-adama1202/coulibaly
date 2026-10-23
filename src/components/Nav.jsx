@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useLanguage } from "../context/LanguageContext";
 
 // Import de votre logo Nieta Digital
-import logo from "../assets/logo.png";
+import logo from "../assets/logo1.png";
 
 export default function Nav({ darkMode, setDarkMode }) {
   const { lang, setLang, t } = useLanguage();

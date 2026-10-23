@@ -21,12 +21,11 @@ export const translations = {
   
       // --- HERO SECTION ---
       hero: {
-        badge: "Studio digital — Bamako, Mali",
         titleStart: "On construit ",
         titleHighlight: "votre présence",
         titleEnd: " numérique.",
         description:
-          "WorldDigital accompagne particuliers et entreprises maliennes dans leurs projets web, mobile et maintenance informatique — de l'idée au lancement.",
+          "Nieta Digital accompagne particuliers et entreprises maliennes dans leurs projets web, mobile, maintenance informatique, conseille et solutions IA — de l'idée au lancement.",
         ctaPrimary: "Discuter de votre projet",
         ctaSecondary: "Voir nos services",
         features: [
@@ -131,18 +130,18 @@ export const translations = {
         
         titleEnd: ".",
         description:
-          "Ce projet est né de deux jeunes maliens convaincus que le numérique peut changer le quotidien des entreprises et des particuliers au Mali. Passionnés de technologie depuis toujours, on a choisi de mettre nos compétences au service de projets concrets — avec la volonté de livrer un travail sérieux, accessible et durable.",
+          "Nieta Digital accompagne les particuliers et les entreprises dans leurs projets numériques : développement web et mobile, maintenance informatique, conseil technologique et solutions d’intelligence artificielle. Née de notre parcours AWS re/Start à ODC Mali, notre initiative ambitionne de transformer les idées en solutions concrètes et de rassembler de jeunes talents autour de projets innovants au Mali.",
         members: [
           {
             name: "Adama KONE",
             role: "Développeur logiciel",
           },
           {
-            name: "Mamadou TRAORÉ",
-            role: "Cofondateur — Design & Mobile",
+            name: "Mamadou Bakary Coulibaly ",
+            role: "Ingénieur Réseaux & systèmes et Designers ",
           },
         ],
-        signature: "SiraSolf",
+        signature: "Nienta Digital",
       },
   
       // --- CONTACT SECTION ---
@@ -222,7 +221,7 @@ export const translations = {
         titleHighlight: "your digital",
         titleEnd: " presence.",
         description:
-          "WorldDigital supports individuals and Malian businesses in their web, mobile, and IT maintenance projects — from concept to launch.",
+          "Nienta dDigital supports individuals and Malian businesses in their web, mobile, and IT maintenance projects — from concept to launch.",
         ctaPrimary: "Discuss your project",
         ctaSecondary: "View our services",
         features: [
@@ -324,18 +323,18 @@ export const translations = {
         titleHighlight: "your success",
         titleEnd: ".",
         description:
-          "This venture was born from two young Malians convinced that digital tools can transform everyday life for businesses and individuals in Mali. Driven by technology, we chose to dedicate our skills to concrete projects — committed to delivering dependable, accessible, and long-lasting work.",
+          "Nieta Digital supports individuals and businesses in their digital projects, offering web and mobile development, IT maintenance, technology consulting, and artificial intelligence solutions. Born out of our AWS re/Start training at ODC Mali, our initiative aims to turn ideas into practical solutions and bring together young talents to collaborate on innovative projects in Mali.",
         members: [
           {
             name: "Adama KONE",
             role: "Web & mobile developer",
           },
           {
-            name: "Co-founder 2",
-            role: "Co-founder — Design & Mobile",
+            name: "Mamadou Bakary Coulibaly ",
+            role: "Networks & systems engineer and designer",
           },
         ],
-        signature: "SiraSolf",
+        signature: "Nienta Digital",
       },
   
       // --- CONTACT SECTION ---

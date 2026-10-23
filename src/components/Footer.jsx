@@ -1,6 +1,7 @@
+
 import { useLanguage } from "../context/LanguageContext";
 
-import logo from "../assets/logo.png";
+import logo from "../assets/logo1.png";
 import partnerLogo from "../assets/cigogne.png";
 
 const SOCIALS = [
@@ -29,22 +30,20 @@ export default function Footer() {
   return (
     <footer
       className="
-        border-t border-neutral-300/60 dark:border-white/[0.08]
-        /* FOND ADOUCI : SABLE DOUX EN LIGHT, ANTHRACITE FEUTRÉ EN DARK */
-        bg-[#ebe6dc] dark:bg-[#111318]
+        border-t border-neutral-200 dark:border-neutral-800
+        bg-white dark:bg-[#111318]
         text-neutral-600 dark:text-neutral-400
-        py-12 px-6 sm:px-8
-        transition-colors duration-500
+        px-6 py-8
+        transition-colors duration-300
       "
     >
       <div className="max-w-6xl mx-auto">
-        {/* Haut : logo + navigation */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 pb-8 border-b border-black/[0.06] dark:border-white/[0.06]">
-          <a
-            href="#hero"
-            aria-label="Nieta Digital"
-            className="w-fit bg-white rounded-xl px-3 py-1.5 shadow-xs border border-black/5 dark:border-white/15 hover:scale-105 transition-transform"
-          >
+
+        {/* Partie principale */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+
+          {/* Logo */}
+          <a href="#hero" aria-label="Nieta Digital">
             <img
               src={logo}
               alt="Nieta Digital"
@@ -52,70 +51,90 @@ export default function Footer() {
             />
           </a>
 
-          <nav className="flex flex-wrap gap-x-7 gap-y-3 text-sm font-medium">
+          {/* Navigation */}
+          <nav className="flex flex-wrap justify-center gap-5 text-sm">
             {t.nav.links.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="text-neutral-700 dark:text-neutral-300 hover:text-[#c68a3e] dark:hover:text-[#c68a3e] transition-colors"
+                className="
+                  hover:text-[#c68a3e]
+                  transition-colors
+                "
               >
                 {link.label}
               </a>
             ))}
           </nav>
-        </div>
 
-        {/* Milieu : partenaire */}
-        <div className="py-6 border-b border-black/[0.06] dark:border-white/[0.06] flex items-center gap-4">
-          <div className="bg-white rounded-xl px-3 py-1.5 flex-shrink-0 shadow-xs border border-black/5 dark:border-white/15">
-            <img
-              src={partnerLogo}
-              alt={partnerName}
-              className="h-8 w-auto object-contain"
-              onError={(e) => {
-                e.currentTarget.style.display = "none";
-              }}
-            />
-          </div>
-          <div className="text-sm">
-            <p className="text-neutral-900 dark:text-neutral-200 font-semibold">
-              <span className="text-[#c68a3e] font-medium">
-                {t.partner?.partnerTag || "Partenaire"}
-              </span>{" "}
-              · {partnerName}
-            </p>
-            <p className="text-neutral-500 dark:text-neutral-400 text-xs">
-              {t.partner?.role || "Cyber café et centre de formation"}
-            </p>
-          </div>
-        </div>
-
-        {/* Bas : copyright, lieu, réseaux */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-          <p className="text-neutral-600 dark:text-neutral-400">
-            © {year} <span className="text-neutral-900 dark:text-neutral-200 font-semibold">Nieta Digital</span>.{" "}
-            {lang === "fr" ? "Tous droits réservés." : "All rights reserved."}
-            <span className="hidden sm:inline text-neutral-400 dark:text-neutral-600"> · </span>
-            <span className="block sm:inline font-mono">📍 Bamako, Mali</span>
-          </p>
-
+          {/* Réseaux sociaux */}
           <div className="flex items-center gap-3">
-            {SOCIALS.map((s) => (
+            {SOCIALS.map((social) => (
               <a
-                key={s.label}
-                href={s.href}
+                key={social.label}
+                href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={s.label}
-                className="w-9 h-9 rounded-full flex items-center justify-center bg-white/60 dark:bg-white/5 border border-black/[0.08] dark:border-white/10 text-neutral-600 dark:text-neutral-400 hover:text-[#c68a3e] hover:border-[#c68a3e] dark:hover:border-[#c68a3e] transition-all hover:scale-105 shadow-xs"
+                aria-label={social.label}
+                className="
+                  text-neutral-500 dark:text-neutral-400
+                  hover:text-[#c68a3e]
+                  transition-colors
+                "
               >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d={s.path} />
+                <svg
+                  className="w-5 h-5 fill-current"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path d={social.path} />
                 </svg>
               </a>
             ))}
           </div>
         </div>
+
+        {/* Partenaire */}
+        <div
+          className="
+            mt-6 pt-5
+            border-t border-neutral-200 dark:border-neutral-800
+            flex flex-col sm:flex-row
+            items-center justify-center
+            gap-2 text-xs
+          "
+        >
+          <span className="text-neutral-500 dark:text-neutral-500">
+            {t.partner?.partnerTag || "Partenaire"}
+          </span>
+
+          <span className="hidden sm:inline">·</span>
+
+          <img
+            src={partnerLogo}
+            alt={partnerName}
+            className="h-6 w-auto object-contain"
+          />
+
+          <span className="font-medium text-neutral-700 dark:text-neutral-300">
+            {partnerName}
+          </span>
+        </div>
+
+        {/* Copyright */}
+        <div className="mt-5 text-center text-xs text-neutral-500 dark:text-neutral-500">
+          © {year}{" "}
+          <span className="font-medium text-neutral-700 dark:text-neutral-300">
+            Nieta Digital
+          </span>
+          {" · "}
+          {lang === "fr"
+            ? "Tous droits réservés."
+            : "All rights reserved."}
+          {" · "}
+          Bamako, Mali
+        </div>
+
       </div>
     </footer>
   );
