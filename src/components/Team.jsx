@@ -1,24 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
 
-// Photos des fondateurs
 import founder1 from "../assets/adama.jpg";
 import founder2 from "../assets/adama.jpg";
 
+// Logos transparents : un pour le mode clair, un pour le mode sombre
+import partnerLogoLight from "../assets/cigogne-light.png";
+import partnerLogoDark from "../assets/cigogne-dark.png";
+
 const PHOTOS = [founder1, founder2];
 
-// Liens LinkedIn de chaque fondateur (à personnaliser avec vos vrais liens)
 const LINKEDIN_URLS = [
-  "https://www.linkedin.com/in/adama-kone", // Lien Adama KONE
-  "https://www.linkedin.com/in/fondateur-2", // Lien Fondateur 2
+  "https://www.linkedin.com/in/adama-kone",
+  "https://www.linkedin.com/in/fondateur-2",
 ];
 
-// Initiales de secours si la photo ne charge pas
 function initials(name) {
-  if (!name) return "WD";
+  if (!name) return "ND";
+
   return name
-    .split(" ")
-    .map((w) => w[0])
+    .trim()
+    .split(/\s+/)
+    .map((word) => word[0])
     .join("")
     .slice(0, 2)
     .toUpperCase();
@@ -29,7 +32,7 @@ function Photo({ src, name }) {
 
   if (broken || !src) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 text-neutral-500 font-bold text-3xl">
+      <div className="flex h-full w-full items-center justify-center bg-neutral-200 text-3xl font-bold text-neutral-500 dark:bg-neutral-800">
         {initials(name)}
       </div>
     );
@@ -41,56 +44,92 @@ function Photo({ src, name }) {
       alt={name}
       loading="lazy"
       onError={() => setBroken(true)}
-      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
     />
   );
 }
 
 export default function Team() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
+
   const sectionRef = useRef(null);
   const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
+  const members = t.team.members || [
+    {
+      name: "Adama KONE",
+      role: "Développeur logiciel",
+    },
+    {
+      name: "Mamadou Bakary Coulibaly",
+      role: "Ingénieur réseaux et systèmes, designer",
+    },
+  ];
 
-    const obs = new IntersectionObserver(
+  // Informations du partenaire depuis translations.js
+  const partner = t.partner || {};
+
+  const partnerLabel =
+    partner.partnerTag || (lang === "fr" ? "Partenaire" : "Partner");
+
+  const partnerName = partner.name || "Cigogne du Mandé";
+  const partnerRole = partner.role || "";
+  const partnerUrl = partner.url || ""; // optionnel : lien vers le site du partenaire
+
+  useEffect(() => {
+    const element = sectionRef.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setVisible(true);
-          obs.disconnect();
+          observer.disconnect();
         }
       },
       { threshold: 0.15 }
     );
 
-    obs.observe(el);
-    return () => obs.disconnect();
+    observer.observe(element);
+
+    return () => observer.disconnect();
   }, []);
 
-  const members = t.team.members || [
-    { name: "Adama KONE", role: "Développeur logiciel" },
-    { name: "Mamadou Bakary Coulibaly ", role: "Ingénieur Réseaux & systèmes et Designers " },
-  ];
+  // Contenu du logo (clair / sombre)
+  const logo = (
+    <>
+      <img
+        src={partnerLogoLight}
+        alt={`Logo ${partnerName}`}
+        loading="lazy"
+        className="block h-auto max-h-28 w-auto max-w-[220px] object-contain transition-transform duration-500 group-hover/partner:scale-105 dark:hidden sm:max-h-32 sm:max-w-[260px]"
+      />
+      <img
+        src={partnerLogoDark}
+        alt={`Logo ${partnerName}`}
+        loading="lazy"
+        className="hidden h-auto max-h-28 w-auto max-w-[220px] object-contain transition-transform duration-500 group-hover/partner:scale-105 dark:block sm:max-h-32 sm:max-w-[260px]"
+      />
+    </>
+  );
 
-  return (   
+  return (
     <section
       ref={sectionRef}
       id="equipe"
-      className="py-20 px-6 sm:px-8 bg-[#f5f2eb] dark:bg-[#0c0d12] transition-colors duration-300"
+      className="bg-[#f5f2eb] px-6 py-20 transition-colors duration-300 dark:bg-[#0c0d12] sm:px-8"
     >
-      <div className="max-w-4xl mx-auto">
-        {/* EN-TÊTE SOBRE */}
-        <div className="text-center max-w-xl mx-auto mb-14">
-          <span className="inline-flex items-center gap-2 font-mono text-xs font-medium uppercase tracking-widest text-neutral-500 dark:text-neutral-400 border border-neutral-300 dark:border-neutral-800 rounded-full px-4 py-1 bg-white/50 dark:bg-white/5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#6fb7a8]" />
+      <div className="mx-auto max-w-4xl">
+        {/* En-tête de la section */}
+        <div className="mx-auto mb-14 max-w-xl text-center">
+          <span className="inline-flex items-center gap-2 border border-neutral-300 bg-white/50 px-4 py-1 text-xs font-medium uppercase tracking-widest text-neutral-500 dark:border-neutral-800 dark:bg-white/5 dark:text-neutral-400">
+            <span className="h-1.5 w-1.5 bg-[#0B3D91] dark:bg-[#5B9BFF]" />
             {t.team.badge}
           </span>
 
-          <h2 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold tracking-tight text-neutral-900 dark:text-white mt-4">
+          <h2 className="mt-4 font-['Space_Grotesk'] text-3xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-4xl">
             {t.team.titleStart}
-            <span className="text-[#c68a3e]">{t.team.titleHighlight}</span>
+            <span className="text-[#0B3D91] dark:text-[#5B9BFF]">{t.team.titleHighlight}</span>
             {t.team.titleEnd}
           </h2>
 
@@ -99,57 +138,38 @@ export default function Team() {
           </p>
         </div>
 
-        {/* GRILLE SIMPLE ET ÉPURÉE (2 COLONNES) */}
+        {/* Membres de l'équipe */}
         <div
-          className={`
-            grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 max-w-2xl mx-auto
-            transition-all duration-700 ease-out
-            ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
-          `}
+          className={`mx-auto grid max-w-2xl grid-cols-1 gap-10 transition-all duration-700 ease-out sm:grid-cols-2 sm:gap-12 ${
+            visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+          }`}
         >
           {members.map((member, index) => (
             <div
               key={member.name}
               className="group flex flex-col items-center text-center"
             >
-              {/* Photo sobre avec coins arrondis */}
-              <div className="w-full max-w-[260px] aspect-[4/5] rounded-2xl overflow-hidden bg-neutral-200 dark:bg-neutral-800 shadow-sm border border-neutral-300/40 dark:border-neutral-800">
+              <div className="aspect-[4/5] w-full max-w-[260px] overflow-hidden border border-neutral-300/60 bg-neutral-200 dark:border-neutral-800 dark:bg-neutral-800">
                 <Photo src={PHOTOS[index]} name={member.name} />
               </div>
 
-              {/* Nom & Rôle */}
-              <h3 className="font-['Space_Grotesk'] text-xl font-bold text-neutral-900 dark:text-white mt-4">
+              <h3 className="mt-4 font-['Space_Grotesk'] text-xl font-bold text-neutral-900 dark:text-white">
                 {member.name}
               </h3>
 
-              <p className="text-xs font-mono uppercase tracking-wider text-[#c68a3e] mt-1">
+              <p className="mt-1 text-xs uppercase tracking-wider text-[#0B3D91] dark:text-[#5B9BFF]">
                 {member.role}
               </p>
 
-              {/* BOUTON LIEN LINKEDIN DISCRET & ÉLÉGANT */}
               <a
                 href={LINKEDIN_URLS[index] || "https://linkedin.com"}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Profil LinkedIn de ${member.name}`}
-                className="
-                  mt-3
-                  inline-flex items-center gap-1.5
-                  px-3.5 py-1.5
-                  rounded-full
-                  text-xs font-medium
-                  text-neutral-600 dark:text-neutral-400
-                  bg-white/80 dark:bg-neutral-800/80
-                  border border-neutral-300/70 dark:border-neutral-700/60
-                  hover:text-[#0a66c2] hover:border-[#0a66c2]/50
-                  dark:hover:text-[#0a66c2] dark:hover:border-[#0a66c2]/50
-                  hover:scale-105
-                  transition-all duration-200
-                  shadow-xs
-                "
+                className="mt-4 inline-flex items-center gap-2 border border-neutral-300 px-3 py-2 text-xs text-neutral-600 transition-colors hover:border-[#0a66c2] hover:text-[#0a66c2] dark:border-neutral-700 dark:text-neutral-400"
               >
                 <svg
-                  className="w-3.5 h-3.5 fill-current"
+                  className="h-4 w-4 fill-current"
                   viewBox="0 0 24 24"
                   aria-hidden="true"
                 >
@@ -161,13 +181,84 @@ export default function Team() {
           ))}
         </div>
 
-        {/* PETITE LIGNE DE SIGNATURE DISCRÈTE */}
-        <div className="flex justify-center mt-16">
-          <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-widest text-neutral-400 dark:text-neutral-600">
-            <span className="w-8 h-px bg-neutral-300 dark:bg-neutral-800" />
-            <span>{t.team.signature || "Nienta Digital"}</span>
-            <span className="w-8 h-px bg-neutral-300 dark:bg-neutral-800" />
+        {/* Partenaire */}
+        <div
+          className={`mt-20 transition-all delay-200 duration-700 ease-out ${
+            visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+          }`}
+        >
+          {/* Titre avec filets */}
+          <div className="mb-8 flex items-center justify-center gap-4">
+            <span className="h-px w-12 bg-neutral-300 dark:bg-neutral-800 sm:w-20" />
+            <span className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.25em] text-neutral-500 dark:text-neutral-400">
+              <span className="h-1.5 w-1.5 bg-[#0B3D91] dark:bg-[#5B9BFF]" />
+              {partnerLabel}
+            </span>
+            <span className="h-px w-12 bg-neutral-300 dark:bg-neutral-800 sm:w-20" />
           </div>
+
+          {/* Carte partenaire */}
+          <div className="group/partner relative mx-auto max-w-2xl overflow-hidden border border-neutral-300/70 bg-white/60 transition-colors duration-300 hover:border-[#0B3D91]/60 dark:border-neutral-800 dark:bg-white/[0.03] dark:hover:border-[#5B9BFF]/50">
+            {/* Coins décoratifs */}
+            <span className="pointer-events-none absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-[#0B3D91] dark:border-[#5B9BFF]" />
+            <span className="pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 border-[#0B3D91] dark:border-[#5B9BFF]" />
+
+            {/* Halo discret derrière le logo */}
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,110,200,0.12),transparent_70%)]" />
+
+            <div className="relative flex flex-col items-center gap-6 px-6 py-10 text-center sm:flex-row sm:gap-10 sm:px-10 sm:text-left">
+              {/* Logo */}
+              <div className="flex shrink-0 items-center justify-center sm:w-[260px]">
+                {partnerUrl ? (
+                  <a
+                    href={partnerUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={partnerName}
+                  >
+                    {logo}
+                  </a>
+                ) : (
+                  logo
+                )}
+              </div>
+
+              {/* Séparateur */}
+              <span className="h-px w-16 bg-[#0B3D91]/50 dark:bg-[#5B9BFF]/50 sm:h-24 sm:w-px" />
+
+              {/* Texte */}
+              <div className="flex flex-col items-center gap-2 sm:items-start">
+                <h3 className="font-['Space_Grotesk'] text-xl font-bold tracking-tight text-neutral-900 dark:text-white">
+                  {partnerName}
+                </h3>
+
+                {partnerRole && (
+                  <p className="text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
+                    {partnerRole}
+                  </p>
+                )}
+
+                {partnerUrl && (
+                  <a
+                    href={partnerUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-[#0B3D91] transition-colors hover:text-[#082d6e] dark:text-[#5B9BFF] dark:hover:text-[#7DB1FF]"
+                  >
+                    {lang === "fr" ? "Découvrir" : "Discover"}
+                    <span aria-hidden="true">→</span>
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Signature */}
+        <div className="mt-14 flex items-center justify-center gap-3 text-[11px] uppercase tracking-widest text-neutral-400 dark:text-neutral-600">
+          <span className="h-px w-8 bg-neutral-300 dark:bg-neutral-800" />
+          <span>{t.team.signature || "Nieta Digital"}</span>
+          <span className="h-px w-8 bg-neutral-300 dark:bg-neutral-800" />
         </div>
       </div>
     </section>

@@ -1,86 +1,107 @@
+/* ---------- Section Services : bleu du logo, style sobre ---------- */
 
 .services-section {
-  position: relative;
-}
-
-.services-list {
-  border-top: 1px solid rgb(120 113 108 / 25%);
-}
-
-.service-tab {
-  display: block;
-  width: 100%;
-  padding: 20px 4px;
-  text-align: left;
-  color: #737373;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid rgb(120 113 108 / 25%);
-  cursor: pointer;
-  transition: color 180ms ease;
-}
-
-.dark .service-tab {
-  color: #a3a3a3;
-  border-bottom-color: rgb(255 255 255 / 15%);
-}
-
-.service-tab:hover,
-.service-tab-active {
-  color: #a66d2a;
-}
-
-.dark .service-tab:hover,
-.dark .service-tab-active {
-  color: #d9a15e;
-}
-
-.service-tab-active {
-  font-weight: 600;
-}
-
-.service-tab:focus-visible,
-.service-cta:focus-visible {
-  outline: 2px solid #b87c3a;
-  outline-offset: 4px;
-}
-
-.service-detail {
-  padding-top: 4px;
-}
-
-.service-cta {
-  display: inline-block;
-  margin-top: 32px;
-  padding-bottom: 5px;
-  color: #a66d2a;
-  font-size: 14px;
-  font-weight: 600;
-  border-bottom: 1px solid #b87c3a;
-  transition: color 180ms ease;
-}
-
-.service-cta:hover {
-  color: #85521f;
-}
-
-.dark .service-cta {
-  color: #d9a15e;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .service-tab,
-  .service-cta {
-    transition: none;
+    position: relative;
   }
-}
-
-@media (max-width: 640px) {
+  
+  .services-list {
+    border-top: 1px solid rgb(120 113 108 / 30%);
+  }
+  
+  /* Onglet : une simple ligne de texte, comme un sommaire de livre */
   .service-tab {
-    padding: 17px 4px;
+    display: block;
+    width: 100%;
+    padding: 20px 4px 20px 14px;
+    text-align: left;
+    color: #57534e;
+    background: transparent;
+    border: none;
+    border-left: 3px solid transparent;
+    border-bottom: 1px solid rgb(120 113 108 / 30%);
+    cursor: pointer;
   }
-
+  
+  .dark .service-tab {
+    color: #a3a3a3;
+    border-bottom-color: rgb(255 255 255 / 15%);
+  }
+  
+  /* Survol : léger soulignement de fond, sans mouvement */
+  .service-tab:hover {
+    color: #0b3d91;
+    background: rgb(11 61 145 / 5%);
+  }
+  
+  .dark .service-tab:hover {
+    color: #5b9bff;
+    background: rgb(91 155 255 / 8%);
+  }
+  
+  /* Onglet actif : trait bleu à gauche + texte en gras */
+  .service-tab-active,
+  .service-tab-active:hover {
+    color: #0b3d91;
+    font-weight: 600;
+    border-left-color: #0b3d91;
+    background: rgb(11 61 145 / 7%);
+  }
+  
+  .dark .service-tab-active,
+  .dark .service-tab-active:hover {
+    color: #5b9bff;
+    border-left-color: #5b9bff;
+    background: rgb(91 155 255 / 10%);
+  }
+  
+  .service-tab:focus-visible,
+  .service-cta:focus-visible {
+    outline: 2px solid #0b3d91;
+    outline-offset: 4px;
+  }
+  
+  .dark .service-tab:focus-visible,
+  .dark .service-cta:focus-visible {
+    outline-color: #5b9bff;
+  }
+  
   .service-detail {
-    padding-top: 0;
+    padding-top: 4px;
   }
-}
+  
+  /* Lien d'action : texte souligné, comme un vrai lien */
+  .service-cta {
+    display: inline-block;
+    margin-top: 32px;
+    padding-bottom: 4px;
+    color: #0b3d91;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 2px solid #0b3d91;
+  }
+  
+  .service-cta:hover {
+    color: #082d6e;
+    border-bottom-color: #082d6e;
+  }
+  
+  .dark .service-cta {
+    color: #5b9bff;
+    border-bottom-color: #5b9bff;
+  }
+  
+  .dark .service-cta:hover {
+    color: #7db1ff;
+    border-bottom-color: #7db1ff;
+  }
+  
+  @media (max-width: 640px) {
+    .service-tab {
+      padding: 17px 4px 17px 12px;
+    }
+  
+    .service-detail {
+      padding-top: 0;
+    }
+  }

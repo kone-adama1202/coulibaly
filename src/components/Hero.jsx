@@ -96,7 +96,7 @@ export default function Hero() {
 
           {/* Filet décoratif */}
           <span
-            className={`block h-1 w-14 rounded-full bg-gradient-to-r from-[#c68a3e] to-[#a66d2a] ${reveal()}`}
+            className={`block h-1 w-14 rounded-full bg-gradient-to-r from-[#0B3D91] to-[#3B7DE0] dark:from-[#5B9BFF] dark:to-[#9CC3FF] ${reveal()}`}
             aria-hidden="true"
           />
 
@@ -125,11 +125,15 @@ export default function Hero() {
               className="
                 group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full
                 font-semibold text-sm sm:text-base text-white
-                bg-gradient-to-br from-[#c68a3e] to-[#a66d2a]
-                shadow-[0_12px_28px_-12px_rgba(166,109,42,0.6)]
-                hover:shadow-[0_18px_36px_-12px_rgba(166,109,42,0.75)]
+                bg-gradient-to-br from-[#0B3D91] to-[#082d6e]
+                shadow-[0_12px_28px_-12px_rgba(11,61,145,0.6)]
+                hover:shadow-[0_18px_36px_-12px_rgba(11,61,145,0.75)]
                 hover:-translate-y-0.5 transition-all duration-300
-                focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b87c3a] focus-visible:ring-offset-2
+                dark:from-[#5B9BFF] dark:to-[#3B7DE0] dark:text-[#001a4d]
+                dark:shadow-[0_12px_28px_-12px_rgba(91,155,255,0.55)]
+                dark:hover:shadow-[0_18px_36px_-12px_rgba(91,155,255,0.7)]
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3D91] focus-visible:ring-offset-2
+                dark:focus-visible:ring-[#5B9BFF] dark:focus-visible:ring-offset-gray-950
               "
             >
               <span>{t.hero.ctaPrimary}</span>
@@ -155,22 +159,18 @@ export default function Hero() {
                 text-[#1e1b17] dark:text-white
                 border border-[#1e1b17]/25 dark:border-white/25
                 bg-white/50 dark:bg-white/5 backdrop-blur-sm
-                hover:border-[#b87c3a] hover:text-[#b87c3a] hover:bg-white/80
-                dark:hover:bg-white/10
+                hover:border-[#0B3D91] hover:text-[#0B3D91] hover:bg-white/80
+                dark:hover:border-[#5B9BFF] dark:hover:text-[#5B9BFF] dark:hover:bg-white/10
                 transition-all duration-300
-                focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b87c3a] focus-visible:ring-offset-2
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0B3D91] focus-visible:ring-offset-2
+                dark:focus-visible:ring-[#5B9BFF] dark:focus-visible:ring-offset-gray-950
               "
             >
               {t.hero.ctaSecondary}
             </a>
           </div>
-
-          {/* Domaines en pastilles */}
-     
         </div>
       </div>
-
-     
     </section>
   );
 }
