@@ -1,4 +1,3 @@
-
 import { useLanguage } from "../context/LanguageContext";
 
 const PROJECTS_DATA = {
@@ -6,25 +5,25 @@ const PROJECTS_DATA = {
     {
       id: "cosmethique",
       title: "Cosméthique",
-      category: "E-commerce · Beauté",
+      category: "E-commerce, beauté",
       description:
-        "Boutique en ligne spécialisée dans la vente de produits cosmétiques naturels, avec un parcours d'achat simple.",
+        "Boutique en ligne de produits cosmétiques naturels, avec un parcours d'achat simple.",
       url: "https://cosmethique.vercel.app/",
     },
     {
       id: "africa-transit",
       title: "Africa Transit Express",
-      category: "Transport · Réservation",
+      category: "Transport, réservation",
       description:
-        "Application web dédiée à la réservation et à l'organisation des voyages interurbains.",
+        "Application web pour réserver et organiser des voyages interurbains.",
       url: "https://mamadou6455.github.io/Africa-transit-express/",
     },
     {
       id: "bambarashop",
       title: "BambaraShop",
-      category: "E-commerce · Boutique en ligne",
+      category: "E-commerce, boutique en ligne",
       description:
-        "Site de vente en ligne avec des fonctionnalités de gestion des produits, des stocks et des commandes.",
+        "Site de vente en ligne avec gestion des produits, des stocks et des commandes.",
       url: "https://bambarashop.netlify.app/",
     },
   ],
@@ -33,38 +32,49 @@ const PROJECTS_DATA = {
     {
       id: "cosmethique",
       title: "Cosméthique",
-      category: "E-commerce · Beauty",
+      category: "E-commerce, beauty",
       description:
-        "Online store specializing in natural cosmetics, with a straightforward shopping experience.",
+        "Online store for natural cosmetics, with a simple shopping experience.",
       url: "https://cosmethique.vercel.app/",
     },
     {
       id: "africa-transit",
       title: "Africa Transit Express",
-      category: "Transport · Booking",
+      category: "Transport, booking",
       description:
-        "Web application for booking and organizing intercity journeys.",
+        "Web application to book and organize intercity journeys.",
       url: "https://mamadou6455.github.io/Africa-transit-express/",
     },
     {
       id: "bambarashop",
       title: "BambaraShop",
-      category: "E-commerce · Online store",
+      category: "E-commerce, online store",
       description:
-        "Online shop with product, stock and order management features.",
+        "Online shop with product, stock and order management.",
       url: "https://bambarashop.netlify.app/",
     },
   ],
 };
 
-function ProjectCard({ project, visitText }) {
+// Couleur d'accent (bleu du logo), cohérente avec la section Services
+const ACCENT = "text-[#0b3d91] dark:text-[#5b9bff]";
+
+function getHost(url) {
+  try {
+    return new URL(url).host;
+  } catch {
+    return url;
+  }
+}
+
+function ProjectCard({ project, visitText, ariaLabel }) {
   return (
-    <article className="flex flex-col border-t border-neutral-300 py-6 dark:border-neutral-700">
+    <article className="group relative flex flex-col border-t border-neutral-300 py-7 transition-colors duration-200 hover:border-[#0b3d91] dark:border-neutral-700 dark:hover:border-[#5b9bff]">
       <p className="text-sm text-neutral-500 dark:text-neutral-400">
         {project.category}
       </p>
 
-      <h3 className="mt-3 text-xl font-semibold text-neutral-900 dark:text-white">
+      <h3 className="mt-3 font-['Space_Grotesk'] text-xl font-semibold text-neutral-900 dark:text-white">
         {project.title}
       </h3>
 
@@ -72,14 +82,25 @@ function ProjectCard({ project, visitText }) {
         {project.description}
       </p>
 
+      <p className="mt-5 text-xs text-neutral-500 dark:text-neutral-500">
+        {getHost(project.url)}
+      </p>
+
+      {/* Lien étendu : toute la carte est cliquable */}
       <a
         href={project.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-5 inline-flex w-fit items-center gap-2 text-sm font-medium text-[#a66d2a] underline decoration-transparent underline-offset-4 hover:decoration-current focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c68a3e] dark:text-[#d9a15e]"
+        aria-label={ariaLabel}
+        className={`mt-2 inline-flex w-fit items-center gap-2 text-sm font-semibold underline decoration-transparent underline-offset-4 transition-colors after:absolute after:inset-0 after:content-[''] hover:decoration-current focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0b3d91] dark:focus-visible:outline-[#5b9bff] ${ACCENT}`}
       >
         {visitText}
-        <span aria-hidden="true">↗</span>
+        <span
+          aria-hidden="true"
+          className="transition-transform duration-200 motion-reduce:transition-none group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+        >
+          ↗
+        </span>
       </a>
     </article>
   );
@@ -89,6 +110,15 @@ export default function Portfolio() {
   const { lang, t } = useLanguage();
   const projects = PROJECTS_DATA[lang] || PROJECTS_DATA.fr;
 
+  const visitText =
+    t.portfolio.visitCTA ||
+    (lang === "fr" ? "Visiter le site" : "Visit website");
+
+  const buildAriaLabel = (title) =>
+    t.portfolio.viewProjectAria
+      ? t.portfolio.viewProjectAria.replace("{title}", title)
+      : `${visitText} ${title}`;
+
   return (
     <section
       id="portfolio"
@@ -96,11 +126,9 @@ export default function Portfolio() {
     >
       <div className="mx-auto max-w-6xl">
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h2 className="font-['Space_Grotesk'] text-3xl font-semibold tracking-tight sm:text-4xl">
             {t.portfolio.titleStart}
-            <span className="text-[#c68a3e]">
-              {t.portfolio.titleHighlight}
-            </span>
+            <span className={ACCENT}>{t.portfolio.titleHighlight}</span>
             {t.portfolio.titleEnd}
           </h2>
 
@@ -114,10 +142,8 @@ export default function Portfolio() {
             <ProjectCard
               key={project.id}
               project={project}
-              visitText={
-                t.portfolio.visitCTA ||
-                (lang === "fr" ? "Visiter le site" : "Visit website")
-              }
+              visitText={visitText}
+              ariaLabel={buildAriaLabel(project.title)}
             />
           ))}
         </div>

@@ -25,7 +25,7 @@ export const translations = {
         titleHighlight: "votre présence",
         titleEnd: " numérique.",
         description:
-          "Nieta Digital accompagne particuliers et entreprises maliennes dans leurs projets web, mobile, maintenance informatique, conseille et solutions IA — de l'idée au lancement.",
+        "Nieta Digital est une entreprise technologique basée à Bamako (Mali) qui œuvre pour la transformation numérique, la formation et l’accès aux solutions digitales en Afrique.",
         ctaPrimary: "Discuter de votre projet",
         ctaSecondary: "Voir nos services",
         features: [
@@ -49,33 +49,33 @@ export const translations = {
         titleHighlight: "pour vous",
         titleEnd: ".",
         description:
-          "Cinq domaines, un même objectif : rendre le digital accessible et fiable au Mali.",
+          "Des solutions complètes, un seul partenaire : de la conception à la formation.",
         readMore: "En savoir plus",
         items: [
           {
             title: "Développement web",
-            desc: "Sites vitrines, plateformes sur-mesure et applications web pensées pour vos clients.",
+            desc: "Sites vitrines, plateformes sur mesure et applications web conçues pour vos utilisateurs.",
           },
           {
             title: "Applications mobiles",
-            desc: "Apps natives ou hybrides, du design au déploiement sur les stores, pensées pour une connexion instable.",
+            desc: "Applications natives ou hybrides, de la conception à la publication sur les stores, adaptées aux connexions instables.",
           },
           {
-            title: "Maintenance & support",
-            desc: "Dépannage sur site et à distance, entretien préventif, contrats de support mensuels.",
+            title: "Odoo (ERP)",
+            desc: "Déploiement, paramétrage et personnalisation d'Odoo pour gérer ventes, stocks, comptabilité et ressources humaines.",
           },
           {
-            title: "Réseaux & infrastructure",
-            desc: "Installation et configuration de réseaux d'entreprise, serveurs, Wi-Fi et câblage.",
+            title: "Intelligence artificielle",
+            desc: "Audit, intégration de l'IA et automatisation de vos processus métier.",
           },
           {
-            title: "Conseil & accompagnement",
-            desc: "Audit digital, stratégie technologique et formation de vos équipes aux outils numériques.",
+            title: "Maintenance & réseaux",
+            desc: "Dépannage sur site et à distance, contrats de support, installation de réseaux, serveurs et Wi-Fi.",
           },
           {
-            title: "Conseil & Solutions IA",
-            desc: "Audit digital, intégration de l'intelligence artificielle et automatisation de vos processus métier.",
-          }
+            title: "Formations & conseil",
+            desc: "Audit digital, stratégie technologique et formation de vos équipes pour qu'elles maîtrisent vos outils.",
+          },
         ],
       },
   
@@ -221,7 +221,7 @@ export const translations = {
         titleHighlight: "your digital",
         titleEnd: " presence.",
         description:
-          "Nienta dDigital supports individuals and Malian businesses in their web, mobile, and IT maintenance projects — from concept to launch.",
+"Nieta Digital is a technology company based in Bamako, Mali, working to drive digital transformation, training and access to digital solutions across Africa.",
         ctaPrimary: "Discuss your project",
         ctaSecondary: "View our services",
         features: [
@@ -238,38 +238,42 @@ export const translations = {
         scrollCue: "Discover",
       },
   
-      // --- SERVICES SECTION ---
-      services: {
-        badge: "Our services",
-        titleStart: "What we can do ",
-        titleHighlight: "for you",
-        titleEnd: ".",
-        description:
-          "Five domains, one single goal: making digital technology accessible and reliable in Mali.",
-        readMore: "Learn more",
-        items: [
-          {
-            title: "Web development",
-            desc: "Showcase websites, custom platforms, and web apps tailored to your customers' needs.",
-          },
-          {
-            title: "Mobile applications",
-            desc: "Native and hybrid apps, from design to app store deployment, built for unstable network connectivity.",
-          },
-          {
-            title: "Maintenance & support",
-            desc: "On-site and remote troubleshooting, preventive maintenance, and monthly support contracts.",
-          },
-          {
-            title: "Networks & infrastructure",
-            desc: "Installation and configuration of corporate networks, servers, Wi-Fi, and cabling.",
-          },
-          {
-            title: "Consulting & advisory",
-            desc: "Digital audits, technology strategy, and team training on digital tools.",
-          },
-        ],
-      },
+     // --- SERVICES SECTION ---
+     services: {
+      badge: "Our services",
+      titleStart: "What we can do ",
+      titleHighlight: "for you",
+      titleEnd: ".",
+      description:
+        "Complete solutions, one partner: from design to training.",
+      readMore: "Learn more",
+      items: [
+        {
+          title: "Web development",
+          desc: "Showcase sites, custom platforms and web apps built around your users.",
+        },
+        {
+          title: "Mobile applications",
+          desc: "Native or hybrid apps, from design to store release, built for unstable connections.",
+        },
+        {
+          title: "Odoo (ERP)",
+          desc: "Deployment, setup and customization of Odoo to manage sales, inventory, accounting and HR.",
+        },
+        {
+          title: "Artificial intelligence",
+          desc: "Audit, AI integration and automation of your business processes.",
+        },
+        {
+          title: "Maintenance & networks",
+          desc: "On-site and remote support, support contracts, network, server and Wi-Fi setup.",
+        },
+        {
+          title: "Training & consulting",
+          desc: "Digital audit, technology strategy and team training so your people master your tools.",
+        },
+      ],
+    },
   
       // --- PORTFOLIO SECTION ---
       portfolio: {

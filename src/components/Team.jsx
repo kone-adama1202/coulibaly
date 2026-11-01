@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
 
-import founder1 from "../assets/adama.jpg";
-import founder2 from "../assets/adama.jpg";
+import founder1 from "../assets/adama.png";
+import founder2 from "../assets/bakary.png";
 
 // Logos transparents : un pour le mode clair, un pour le mode sombre
 import partnerLogoLight from "../assets/cigogne-light.png";
@@ -11,9 +11,18 @@ import partnerLogoDark from "../assets/cigogne-dark.png";
 const PHOTOS = [founder1, founder2];
 
 const LINKEDIN_URLS = [
-  "https://www.linkedin.com/in/adama-kone",
-  "https://www.linkedin.com/in/fondateur-2",
+  "https://www.linkedin.com/in/adama-kone-7a0240208/",
+  "https://www.linkedin.com/in/mamadou-bakary-coulibaly/",
 ];
+
+/*
+  Palette tirée du logo Nieta Digital
+  - Bleu marine  #0B3D91  (clair)  /  #5B9BFF (sombre)
+  - Orange       #F7931E  (accent unique : les petits carrés du logo)
+*/
+const BLUE = "text-[#0B3D91] dark:text-[#5B9BFF]";
+const FOCUS =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0B3D91] dark:focus-visible:outline-[#5B9BFF]";
 
 function initials(name) {
   if (!name) return "ND";
@@ -32,7 +41,7 @@ function Photo({ src, name }) {
 
   if (broken || !src) {
     return (
-      <div className="flex h-full w-full items-center justify-center bg-neutral-200 text-3xl font-bold text-neutral-500 dark:bg-neutral-800">
+      <div className="flex h-full w-full items-center justify-center bg-[#dfe7f5] text-3xl font-bold text-[#0B3D91] dark:bg-[#14264d] dark:text-[#5B9BFF]">
         {initials(name)}
       </div>
     );
@@ -44,7 +53,7 @@ function Photo({ src, name }) {
       alt={name}
       loading="lazy"
       onError={() => setBroken(true)}
-      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+      className="h-full w-full object-cover"
     />
   );
 }
@@ -55,26 +64,13 @@ export default function Team() {
   const sectionRef = useRef(null);
   const [visible, setVisible] = useState(false);
 
-  const members = t.team.members || [
-    {
-      name: "Adama KONE",
-      role: "Développeur logiciel",
-    },
-    {
-      name: "Mamadou Bakary Coulibaly",
-      role: "Ingénieur réseaux et systèmes, designer",
-    },
-  ];
+  const members = t.team.members || [];
 
   // Informations du partenaire depuis translations.js
   const partner = t.partner || {};
-
-  const partnerLabel =
-    partner.partnerTag || (lang === "fr" ? "Partenaire" : "Partner");
-
   const partnerName = partner.name || "Cigogne du Mandé";
   const partnerRole = partner.role || "";
-  const partnerUrl = partner.url || ""; // optionnel : lien vers le site du partenaire
+  const partnerUrl = partner.url || ""; // optionnel : site du partenaire
 
   useEffect(() => {
     const element = sectionRef.current;
@@ -91,24 +87,25 @@ export default function Team() {
     );
 
     observer.observe(element);
-
     return () => observer.disconnect();
   }, []);
 
-  // Contenu du logo (clair / sombre)
+  const logoClasses =
+    "h-auto max-h-24 w-auto max-w-[200px] object-contain sm:max-h-28 sm:max-w-[240px]";
+
   const logo = (
     <>
       <img
         src={partnerLogoLight}
         alt={`Logo ${partnerName}`}
         loading="lazy"
-        className="block h-auto max-h-28 w-auto max-w-[220px] object-contain transition-transform duration-500 group-hover/partner:scale-105 dark:hidden sm:max-h-32 sm:max-w-[260px]"
+        className={`block dark:hidden ${logoClasses}`}
       />
       <img
         src={partnerLogoDark}
         alt={`Logo ${partnerName}`}
         loading="lazy"
-        className="hidden h-auto max-h-28 w-auto max-w-[220px] object-contain transition-transform duration-500 group-hover/partner:scale-105 dark:block sm:max-h-32 sm:max-w-[260px]"
+        className={`hidden dark:block ${logoClasses}`}
       />
     </>
   );
@@ -117,56 +114,59 @@ export default function Team() {
     <section
       ref={sectionRef}
       id="equipe"
-      className="bg-[#f5f2eb] px-6 py-20 transition-colors duration-300 dark:bg-[#0c0d12] sm:px-8"
+      className="bg-[#f5f2eb] px-6 py-20 text-neutral-900 dark:bg-[#0c0d12] dark:text-white sm:px-8 lg:py-24"
     >
-      <div className="mx-auto max-w-4xl">
-        {/* En-tête de la section */}
-        <div className="mx-auto mb-14 max-w-xl text-center">
-          <span className="inline-flex items-center gap-2 border border-neutral-300 bg-white/50 px-4 py-1 text-xs font-medium uppercase tracking-widest text-neutral-500 dark:border-neutral-800 dark:bg-white/5 dark:text-neutral-400">
-            <span className="h-1.5 w-1.5 bg-[#0B3D91] dark:bg-[#5B9BFF]" />
-            {t.team.badge}
-          </span>
-
-          <h2 className="mt-4 font-['Space_Grotesk'] text-3xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-4xl">
+      <div
+        className={`mx-auto max-w-6xl transition-all duration-700 ease-out motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none ${
+          visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+        }`}
+      >
+        {/* En-tête */}
+        <div className="mx-auto mb-14 max-w-2xl text-center">
+          <h2 className="font-['Space_Grotesk'] text-3xl font-semibold tracking-tight sm:text-4xl">
             {t.team.titleStart}
-            <span className="text-[#0B3D91] dark:text-[#5B9BFF]">{t.team.titleHighlight}</span>
+            <span className={BLUE}>{t.team.titleHighlight}</span>
             {t.team.titleEnd}
           </h2>
 
-          <p className="mt-3 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
+          <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-neutral-600 dark:text-neutral-400">
             {t.team.description}
           </p>
         </div>
 
-        {/* Membres de l'équipe */}
-        <div
-          className={`mx-auto grid max-w-2xl grid-cols-1 gap-10 transition-all duration-700 ease-out sm:grid-cols-2 sm:gap-12 ${
-            visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
-          }`}
-        >
+        {/* Membres */}
+        <div className="mx-auto grid max-w-2xl grid-cols-1 gap-12 sm:grid-cols-2 sm:gap-14">
           {members.map((member, index) => (
-            <div
-              key={member.name}
-              className="group flex flex-col items-center text-center"
-            >
-              <div className="aspect-[4/5] w-full max-w-[260px] overflow-hidden border border-neutral-300/60 bg-neutral-200 dark:border-neutral-800 dark:bg-neutral-800">
-                <Photo src={PHOTOS[index]} name={member.name} />
+            <div key={member.name} className="flex flex-col items-center text-center">
+              {/* Photo : décalage bleu + petit carré orange (clin d'œil au logo) */}
+              <div className="relative w-full max-w-[260px]">
+                <div className="aspect-[4/5] w-full overflow-hidden bg-[#dfe7f5] shadow-[8px_8px_0_0_#0B3D91] dark:bg-[#14264d] dark:shadow-[8px_8px_0_0_#1f4fa3]">
+                  <Photo src={PHOTOS[index]} name={member.name} />
+                </div>
+                <span
+                  className="absolute -right-2.5 -top-2.5 h-4 w-4 bg-[#F7931E]"
+                  aria-hidden="true"
+                />
               </div>
 
-              <h3 className="mt-4 font-['Space_Grotesk'] text-xl font-bold text-neutral-900 dark:text-white">
-                {member.name}
+              <h3 className="mt-8 font-['Space_Grotesk'] text-xl font-semibold">
+                {member.name.trim()}
               </h3>
 
-              <p className="mt-1 text-xs uppercase tracking-wider text-[#0B3D91] dark:text-[#5B9BFF]">
-                {member.role}
+              <p className={`mt-1 text-sm font-medium ${BLUE}`}>
+                {member.role.trim()}
               </p>
 
               <a
                 href={LINKEDIN_URLS[index] || "https://linkedin.com"}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`Profil LinkedIn de ${member.name}`}
-                className="mt-4 inline-flex items-center gap-2 border border-neutral-300 px-3 py-2 text-xs text-neutral-600 transition-colors hover:border-[#0a66c2] hover:text-[#0a66c2] dark:border-neutral-700 dark:text-neutral-400"
+                aria-label={
+                  lang === "fr"
+                    ? `Profil LinkedIn de ${member.name.trim()}`
+                    : `${member.name.trim()} on LinkedIn`
+                }
+                className={`mt-4 inline-flex items-center gap-2 border-b border-neutral-400 pb-1 text-sm text-neutral-600 transition-colors hover:border-[#0B3D91] hover:text-[#0B3D91] dark:border-neutral-600 dark:text-neutral-400 dark:hover:border-[#5B9BFF] dark:hover:text-[#5B9BFF] ${FOCUS}`}
               >
                 <svg
                   className="h-4 w-4 fill-current"
@@ -175,91 +175,67 @@ export default function Team() {
                 >
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                 </svg>
-                <span>LinkedIn</span>
+                LinkedIn
               </a>
             </div>
           ))}
         </div>
 
         {/* Partenaire */}
-        <div
-          className={`mt-20 transition-all delay-200 duration-700 ease-out ${
-            visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
-          }`}
-        >
-          {/* Titre avec filets */}
-          <div className="mb-8 flex items-center justify-center gap-4">
-            <span className="h-px w-12 bg-neutral-300 dark:bg-neutral-800 sm:w-20" />
-            <span className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.25em] text-neutral-500 dark:text-neutral-400">
-              <span className="h-1.5 w-1.5 bg-[#0B3D91] dark:bg-[#5B9BFF]" />
-              {partnerLabel}
-            </span>
-            <span className="h-px w-12 bg-neutral-300 dark:bg-neutral-800 sm:w-20" />
-          </div>
+        <div className="mx-auto mt-20 max-w-3xl text-center">
+          <h3 className="font-['Space_Grotesk'] text-xl font-semibold sm:text-2xl">
+            {partner.titleStart}
+            <span className={BLUE}>{partner.titleHighlight}</span>
+            {partner.titleEnd}
+          </h3>
 
-          {/* Carte partenaire */}
-          <div className="group/partner relative mx-auto max-w-2xl overflow-hidden border border-neutral-300/70 bg-white/60 transition-colors duration-300 hover:border-[#0B3D91]/60 dark:border-neutral-800 dark:bg-white/[0.03] dark:hover:border-[#5B9BFF]/50">
-            {/* Coins décoratifs */}
-            <span className="pointer-events-none absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-[#0B3D91] dark:border-[#5B9BFF]" />
-            <span className="pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 border-[#0B3D91] dark:border-[#5B9BFF]" />
+          <div className="mt-6 flex flex-col items-center gap-6 border-l-4 border-[#0B3D91] bg-white p-6 dark:border-[#5B9BFF] dark:bg-white/[0.04] sm:flex-row sm:items-center sm:gap-10 sm:p-8">
+            <div className="flex shrink-0 items-center justify-center sm:w-[240px]">
+              {partnerUrl ? (
+                <a
+                  href={partnerUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={partnerName}
+                  className={FOCUS}
+                >
+                  {logo}
+                </a>
+              ) : (
+                logo
+              )}
+            </div>
 
-            {/* Halo discret derrière le logo */}
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,110,200,0.12),transparent_70%)]" />
+            <div className="flex flex-col items-center gap-1.5 sm:items-start sm:text-left">
+              <h4 className="font-['Space_Grotesk'] text-lg font-semibold">
+                {partnerName}
+              </h4>
 
-            <div className="relative flex flex-col items-center gap-6 px-6 py-10 text-center sm:flex-row sm:gap-10 sm:px-10 sm:text-left">
-              {/* Logo */}
-              <div className="flex shrink-0 items-center justify-center sm:w-[260px]">
-                {partnerUrl ? (
-                  <a
-                    href={partnerUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={partnerName}
-                  >
-                    {logo}
-                  </a>
-                ) : (
-                  logo
-                )}
-              </div>
+              {partnerRole && (
+                <p className="text-sm leading-6 text-neutral-600 dark:text-neutral-400">
+                  {partnerRole}
+                </p>
+              )}
 
-              {/* Séparateur */}
-              <span className="h-px w-16 bg-[#0B3D91]/50 dark:bg-[#5B9BFF]/50 sm:h-24 sm:w-px" />
-
-              {/* Texte */}
-              <div className="flex flex-col items-center gap-2 sm:items-start">
-                <h3 className="font-['Space_Grotesk'] text-xl font-bold tracking-tight text-neutral-900 dark:text-white">
-                  {partnerName}
-                </h3>
-
-                {partnerRole && (
-                  <p className="text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
-                    {partnerRole}
-                  </p>
-                )}
-
-                {partnerUrl && (
-                  <a
-                    href={partnerUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-2 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-[#0B3D91] transition-colors hover:text-[#082d6e] dark:text-[#5B9BFF] dark:hover:text-[#7DB1FF]"
-                  >
-                    {lang === "fr" ? "Découvrir" : "Discover"}
-                    <span aria-hidden="true">→</span>
-                  </a>
-                )}
-              </div>
+              {partnerUrl && (
+                <a
+                  href={partnerUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`mt-2 w-fit border-b-2 border-current pb-0.5 text-sm font-semibold transition-colors hover:text-[#082d6e] dark:hover:text-[#7DB1FF] ${BLUE} ${FOCUS}`}
+                >
+                  {lang === "fr" ? "Découvrir le site" : "Visit website"}
+                </a>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Signature */}
-        <div className="mt-14 flex items-center justify-center gap-3 text-[11px] uppercase tracking-widest text-neutral-400 dark:text-neutral-600">
-          <span className="h-px w-8 bg-neutral-300 dark:bg-neutral-800" />
-          <span>{t.team.signature || "Nieta Digital"}</span>
-          <span className="h-px w-8 bg-neutral-300 dark:bg-neutral-800" />
-        </div>
+        {/* Signature : slogan du logo */}
+        <p className="mt-16 flex items-center justify-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
+          <span className="h-2 w-2 bg-[#F7931E]" aria-hidden="true" />
+          {t.team.signature}
+        </p>
       </div>
     </section>
   );
