@@ -6,20 +6,37 @@
     <title>Nieta Digital — Solutions digitales en Afrique</title>
     <meta name="description" content="Nieta Digital, entreprise technologique basée à Bamako (Mali) : transformation numérique, formation et solutions digitales en Afrique." />
     <meta name="theme-color" content="#0b2e75" />
-    <meta property="og:image" content="https://nietadigital.com/favicon2.png" />
+    <link rel="canonical" href="https://nietadigital.com/" />
 
-    <!-- Logo dans l'onglet du navigateur -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon2.png?v=1" />
-<link rel="icon" type="image/png" sizes="192x192" href="/favicon2.png?v=1" />
-<link rel="shortcut icon" href="/favicon2.png?v=1" />
-<link rel="apple-touch-icon" href="/favicon2.png?v=1" />
+    <!-- Logo (favicon) : image carrée, multiple de 48 px (192x192 ou 512x512) -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon2.png" />
+    <link rel="apple-touch-icon" href="/favicon2.png" />
 
     <!-- Aperçu lors du partage (WhatsApp, Facebook, LinkedIn) -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Nieta Digital" />
+    <meta property="og:locale" content="fr_FR" />
     <meta property="og:title" content="Nieta Digital" />
     <meta property="og:description" content="Transformation numérique, formation et solutions digitales en Afrique." />
-    <meta property="og:url" content="https://nietadigital.com" />
-    <meta property="og:image" content="https://nietadigital.com/favicon1.png" />
+    <meta property="og:url" content="https://nietadigital.com/" />
+    <meta property="og:image" content="https://nietadigital.com/favicon2.png" />
+
+    <!-- Données structurées : aide Google à associer ton logo à ta marque -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Nieta Digital",
+      "url": "https://nietadigital.com/",
+      "logo": "https://nietadigital.com/favicon2.png",
+      "description": "Entreprise technologique basée à Bamako (Mali) : transformation numérique, formation et solutions digitales en Afrique.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bamako",
+        "addressCountry": "ML"
+      }
+    }
+    </script>
 
     <!-- Polices -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -29,6 +46,7 @@
   <body>
     <div id="root"></div>
 
+    <!-- Attention : data-netlify ne fonctionne que sur Netlify, pas sur Vercel -->
     <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
       <input type="text" name="name" />
       <input type="email" name="email" />
