@@ -8,7 +8,7 @@ const PROJECTS_DATA = {
       category: "E-commerce, beauté",
       description:
         "Boutique en ligne de produits cosmétiques naturels, avec un parcours d'achat simple.",
-      url: "https://cosmethique.vercel.app/",
+      url: "https://falayeboutique.com/",
     },
     {
       id: "africa-transit",
@@ -16,7 +16,7 @@ const PROJECTS_DATA = {
       category: "Transport, réservation",
       description:
         "Application web pour réserver et organiser des voyages interurbains.",
-      url: "https://mamadou6455.github.io/Africa-transit-express/",
+      url: " https://africa-transit-express.wuaze.com/",
     },
     {
       id: "bambarashop",
@@ -24,7 +24,7 @@ const PROJECTS_DATA = {
       category: "E-commerce, boutique en ligne",
       description:
         "Site de vente en ligne avec gestion des produits, des stocks et des commandes.",
-      url: "https://bambarashop.netlify.app/",
+      url: "https://bambarashop.com",
     },
   ],
 
