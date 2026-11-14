@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
 
 // Logo Nieta Digital
-import logo from "../assets/logo1.png";
+import logo from "../assets/logo.png";
 
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 " +

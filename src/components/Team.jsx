@@ -7,6 +7,9 @@ import founder2 from "../assets/bakary.png";
 // Image de la section Mission (à adapter au nom de votre fichier)
 import missionImage from "../assets/mission.jpg";
 
+// Illustration de l'en-tête (équipe autour d'une table)
+import teamIllustration from "../assets/team-illustration.png";
+
 // Logos transparents : un pour le mode clair, un pour le mode sombre
 import partnerLogoLight from "../assets/cigogne-light.png";
 import partnerLogoDark from "../assets/cigogne-dark.png";
@@ -17,6 +20,28 @@ const LINKEDIN_URLS = [
   "https://www.linkedin.com/in/adama-kone-7a0240208/",
   "https://www.linkedin.com/in/mamadou-bakary-coulibaly/",
 ];
+
+/*
+  En-tête de la section Équipe.
+  Si t.team contient eyebrow / titleStart / titleHighlight / titleEnd,
+  ces valeurs remplacent automatiquement les textes ci-dessous.
+*/
+const HEADER_FALLBACK = {
+  fr: {
+    eyebrow: "L'équipe",
+    titleStart: "Une équipe unie pour ",
+    titleHighlight: "votre réussite",
+    titleEnd: "",
+  },
+  en: {
+    eyebrow: "The team",
+    titleStart: "One united team for ",
+    titleHighlight: "your success",
+    titleEnd: "",
+  },
+};
+
+
 
 /*
   Textes de la section Mission.
@@ -102,10 +127,12 @@ function SideRule() {
 }
 
 /* Petit séparateur : filet + losange orange (clin d'œil au logo) */
-function DiamondDivider() {
+function DiamondDivider({ centered = false }) {
   return (
     <div
-      className="my-6 flex items-center justify-center gap-3 lg:justify-start"
+      className={`my-6 flex items-center justify-center gap-3 ${
+        centered ? "" : "lg:justify-start"
+      }`}
       aria-hidden="true"
     >
       <span className="h-px w-10 bg-neutral-300 dark:bg-white/20" />
@@ -173,6 +200,15 @@ export default function Team() {
 
   const members = t.team.members || [];
 
+  // En-tête : translations.js en priorité, sinon textes par défaut
+  const header = {
+    ...(HEADER_FALLBACK[lang] || HEADER_FALLBACK.fr),
+    ...(t.team.eyebrow && { eyebrow: t.team.eyebrow }),
+    ...(t.team.titleStart && { titleStart: t.team.titleStart }),
+    ...(t.team.titleHighlight && { titleHighlight: t.team.titleHighlight }),
+    ...(t.team.titleEnd !== undefined && { titleEnd: t.team.titleEnd }),
+  };
+
   // Section Mission : translations.js en priorité, sinon textes par défaut
   const mission = t.team.mission || MISSION_FALLBACK[lang] || MISSION_FALLBACK.fr;
 
@@ -232,16 +268,47 @@ export default function Team() {
         }`}
       >
         {/* En-tête */}
-        <div className="mx-auto mb-14 max-w-2xl text-center">
-          <h2 className="font-['Space_Grotesk'] text-3xl font-semibold tracking-tight sm:text-4xl">
-            {t.team.titleStart}
-            <span className={BLUE}>{t.team.titleHighlight}</span>
-            {t.team.titleEnd}
+        <div className="relative mb-16 flex min-h-[360px] items-center justify-center overflow-hidden py-10 sm:min-h-[440px] sm:py-14">
+          {/* Filigrane : illustration d'équipe. Le blanc du PNG disparaît grâce au mode de fusion. */}
+          <div
+            className="pointer-events-none absolute inset-0 flex items-center justify-center [-webkit-mask-image:radial-gradient(ellipse_at_center,black_45%,transparent_80%)] [mask-image:radial-gradient(ellipse_at_center,black_45%,transparent_80%)]"
+            aria-hidden="true"
+          >
+            <img
+              src={teamIllustration}
+              alt=""
+              loading="lazy"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+              className="h-full w-auto max-w-none object-contain opacity-[0.16] mix-blend-multiply dark:opacity-[0.14] dark:mix-blend-screen dark:[filter:invert(1)_hue-rotate(180deg)]"
+            />
+          </div>
+
+          <div className="relative z-10 mx-auto max-w-2xl text-center">
+          {/* Étiquette avec petits carrés orange (clin d'œil au logo) */}
+          <div className="mb-4 flex items-center justify-center gap-3">
+            <span className="h-2 w-2 bg-[#F7931E]" aria-hidden="true" />
+            <span className={`text-sm font-semibold tracking-wide ${BLUE}`}>
+              {header.eyebrow}
+            </span>
+            <span className="h-2 w-2 bg-[#F7931E]" aria-hidden="true" />
+          </div>
+
+          <h2 className="font-['Space_Grotesk'] text-3xl font-bold tracking-tight sm:text-4xl">
+            {header.titleStart}
+            <span className={BLUE}>{header.titleHighlight}</span>
+            {header.titleEnd}
           </h2>
 
-          <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-neutral-600 dark:text-neutral-400">
-            {t.team.description}
-          </p>
+          <DiamondDivider centered />
+
+          {t.team.description && (
+            <p className="mx-auto max-w-xl text-base font-medium leading-8 text-neutral-800 dark:text-neutral-200 sm:text-lg">
+              {t.team.description}
+            </p>
+          )}
+          </div>
         </div>
 
         {/* Membres */}
@@ -343,12 +410,6 @@ export default function Team() {
             </div>
           </div>
         </div>
-
-        {/* Signature : slogan du logo */}
-        <p className="mt-16 flex items-center justify-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
-          <span className="h-2 w-2 bg-[#F7931E]" aria-hidden="true" />
-          {t.team.signature}
-        </p>
       </div>
     </section>
   );
