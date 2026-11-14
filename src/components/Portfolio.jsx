@@ -1,57 +1,54 @@
+import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
+
+// Les images dans src/assets doivent être IMPORTÉES (un chemin texte
+// comme "../assets/..." ne fonctionne pas : le bundler ne le résout pas).
+// Adaptez les noms de fichiers si besoin.
+import siteVitrine1 from "../assets/portfolio/sitevitrine1.jpg";
+import siteVitrine2 from "../assets/portfolio/sitevitrine2.jpg";
+import siteVitrine3 from "../assets/portfolio/sitevitrine3.jpg";
+
+// Image de chaque projet (partagée entre le français et l'anglais)
+const PROJECT_IMAGES = {
+  cosmethique: siteVitrine1,
+  "africa-transit": siteVitrine2,
+  bambarashop: siteVitrine3,
+};
 
 const PROJECTS_DATA = {
   fr: [
     {
       id: "cosmethique",
-      title: "Cosméthique",
-      category: "E-commerce, beauté",
-      description:
-        "Boutique en ligne de produits cosmétiques naturels, avec un parcours d'achat simple.",
-      url: "https://falayeboutique.com/",
+      title: "Site vitrine",
+      category: "Site vitrine",
     },
     {
       id: "africa-transit",
       title: "Africa Transit Express",
-      category: "Transport, réservation",
-      description:
-        "Application web pour réserver et organiser des voyages interurbains.",
-      url: " https://africa-transit-express.wuaze.com/",
+      category: "site vitrine",
     },
     {
       id: "bambarashop",
       title: "BambaraShop",
-      category: "E-commerce, boutique en ligne",
-      description:
-        "Site de vente en ligne avec gestion des produits, des stocks et des commandes.",
-      url: "https://bambarashop.com",
+      category: "E-commerce",
     },
   ],
 
   en: [
     {
       id: "cosmethique",
-      title: "Cosméthique",
+      title: "Showcase website",
       category: "E-commerce, beauty",
-      description:
-        "Online store for natural cosmetics, with a simple shopping experience.",
-      url: "https://cosmethique.vercel.app/",
     },
     {
       id: "africa-transit",
       title: "Africa Transit Express",
       category: "Transport, booking",
-      description:
-        "Web application to book and organize intercity journeys.",
-      url: "https://mamadou6455.github.io/Africa-transit-express/",
     },
     {
       id: "bambarashop",
       title: "BambaraShop",
       category: "E-commerce, online store",
-      description:
-        "Online shop with product, stock and order management.",
-      url: "https://bambarashop.netlify.app/",
     },
   ],
 };
@@ -59,50 +56,99 @@ const PROJECTS_DATA = {
 // Couleur d'accent (bleu du logo), cohérente avec la section Services
 const ACCENT = "text-[#0b3d91] dark:text-[#5b9bff]";
 
-function getHost(url) {
-  try {
-    return new URL(url).host;
-  } catch {
-    return url;
-  }
-}
+/*
+ * Réglages de l'effet d'inclinaison 3D (souris uniquement).
+ * Mettre TILT_MAX_DEG à 0 pour le désactiver.
+ */
+const TILT_MAX_DEG = 7;
 
-function ProjectCard({ project, visitText, ariaLabel }) {
+function ProjectCard({ project, index, visible }) {
+  const tiltRef = useRef(null);
+
+  // Inclinaison 3D qui suit la souris (ignorée au tactile et si l'utilisateur
+  // a demandé moins d'animations)
+  const handlePointerMove = (event) => {
+    if (TILT_MAX_DEG === 0 || event.pointerType !== "mouse") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const element = tiltRef.current;
+    if (!element) return;
+
+    const rect = element.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+
+    element.style.setProperty("--ry", `${x * TILT_MAX_DEG * 2}deg`);
+    element.style.setProperty("--rx", `${-y * TILT_MAX_DEG * 2}deg`);
+  };
+
+  const resetTilt = () => {
+    const element = tiltRef.current;
+    if (!element) return;
+    element.style.setProperty("--rx", "0deg");
+    element.style.setProperty("--ry", "0deg");
+  };
+
   return (
-    <article className="group relative flex flex-col border-t border-neutral-300 py-7 transition-colors duration-200 hover:border-[#0b3d91] dark:border-neutral-700 dark:hover:border-[#5b9bff]">
-      <p className="text-sm text-neutral-500 dark:text-neutral-400">
-        {project.category}
-      </p>
-
-      <h3 className="mt-3 font-['Space_Grotesk'] text-xl font-semibold text-neutral-900 dark:text-white">
-        {project.title}
-      </h3>
-
-      <p className="mt-3 flex-1 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-        {project.description}
-      </p>
-
-      <p className="mt-5 text-xs text-neutral-500 dark:text-neutral-500">
-        {getHost(project.url)}
-      </p>
-
-      {/* Lien étendu : toute la carte est cliquable */}
-      <a
-        href={project.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={ariaLabel}
-        className={`mt-2 inline-flex w-fit items-center gap-2 text-sm font-semibold underline decoration-transparent underline-offset-4 transition-colors after:absolute after:inset-0 after:content-[''] hover:decoration-current focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0b3d91] dark:focus-visible:outline-[#5b9bff] ${ACCENT}`}
-      >
-        {visitText}
-        <span
-          aria-hidden="true"
-          className="transition-transform duration-200 motion-reduce:transition-none group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+    // Entrée au défilement : fondu + montée, décalée d'une carte à l'autre
+    <div
+      style={{ transitionDelay: `${index * 120}ms` }}
+      className={`transition-all duration-700 ease-out motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none ${
+        visible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+      }`}
+    >
+      <figure className="group m-0">
+        <div
+          ref={tiltRef}
+          onPointerMove={handlePointerMove}
+          onPointerLeave={resetTilt}
+          style={{
+            transform:
+              "perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))",
+          }}
+          className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gradient-to-br from-[#0b3d91] to-[#5b9bff] shadow-lg shadow-black/15 ring-1 ring-black/5 transition-[transform,box-shadow] duration-300 ease-out will-change-transform group-hover:shadow-2xl group-hover:shadow-[#0b3d91]/30 motion-reduce:transform-none motion-reduce:transition-none dark:ring-white/10"
         >
-          ↗
-        </span>
-      </a>
-    </article>
+          <img
+            src={PROJECT_IMAGES[project.id]}
+            alt={project.title}
+            loading="lazy"
+            onError={(event) => {
+              // image introuvable : on garde le fond dégradé
+              event.currentTarget.style.display = "none";
+            }}
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-110 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+          />
+
+          {/* Voile dégradé : donne de la profondeur, s'intensifie au survol */}
+          <span
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b3d91]/55 via-transparent to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100"
+            aria-hidden="true"
+          />
+
+          {/* Reflet lumineux qui traverse l'image au survol */}
+          <span
+            className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 transition-all duration-[900ms] ease-out group-hover:left-[130%] group-hover:opacity-100 motion-reduce:hidden"
+            aria-hidden="true"
+          />
+
+          {/* Petit carré orange : clin d'œil au logo */}
+          <span
+            className="absolute right-3 top-3 h-3 w-3 bg-[#F7931E] transition-transform duration-300 group-hover:rotate-90 group-hover:scale-125 motion-reduce:transition-none"
+            aria-hidden="true"
+          />
+        </div>
+
+        <figcaption className="mt-5 flex flex-col items-center gap-2.5 text-center">
+          <span
+            className="h-0.5 w-6 bg-[#F7931E] transition-all duration-300 group-hover:w-14 motion-reduce:transition-none"
+            aria-hidden="true"
+          />
+          <span className="text-base font-semibold text-neutral-800 transition-colors duration-300 group-hover:text-[#0b3d91] dark:text-neutral-100 dark:group-hover:text-[#5b9bff]">
+            {project.category}
+          </span>
+        </figcaption>
+      </figure>
+    </div>
   );
 }
 
@@ -110,40 +156,67 @@ export default function Portfolio() {
   const { lang, t } = useLanguage();
   const projects = PROJECTS_DATA[lang] || PROJECTS_DATA.fr;
 
-  const visitText =
-    t.portfolio.visitCTA ||
-    (lang === "fr" ? "Visiter le site" : "Visit website");
+  const sectionRef = useRef(null);
+  const [visible, setVisible] = useState(false);
 
-  const buildAriaLabel = (title) =>
-    t.portfolio.viewProjectAria
-      ? t.portfolio.viewProjectAria.replace("{title}", title)
-      : `${visitText} ${title}`;
+  // Les cartes apparaissent quand la section entre à l'écran
+  useEffect(() => {
+    const element = sectionRef.current;
+    if (!element) return undefined;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section
+      ref={sectionRef}
       id="portfolio"
       className="bg-[#f8f6f0] px-6 py-20 text-neutral-900 dark:bg-[#0c0d12] dark:text-white sm:px-8 lg:py-24"
     >
       <div className="mx-auto max-w-6xl">
-        <div className="mb-12 max-w-2xl">
-          <h2 className="font-['Space_Grotesk'] text-3xl font-semibold tracking-tight sm:text-4xl">
-            {t.portfolio.titleStart}
-            <span className={ACCENT}>{t.portfolio.titleHighlight}</span>
-            {t.portfolio.titleEnd}
-          </h2>
+        {/* En-tête centré, avec un filet de chaque côté du titre */}
+        <div className="mb-12 text-center">
+          <div className="flex items-center justify-center gap-4 sm:gap-6">
+            <span
+              className="hidden h-px w-16 bg-neutral-300 dark:bg-white/20 sm:block md:w-24"
+              aria-hidden="true"
+            />
 
-          <p className="mt-4 text-base leading-7 text-neutral-600 dark:text-neutral-400">
+            <h2 className="font-['Space_Grotesk'] text-3xl font-semibold tracking-tight sm:text-4xl">
+              {t.portfolio.titleStart}
+              <span className={ACCENT}>{t.portfolio.titleHighlight}</span>
+              {t.portfolio.titleEnd}
+            </h2>
+
+            <span
+              className="hidden h-px w-16 bg-neutral-300 dark:bg-white/20 sm:block md:w-24"
+              aria-hidden="true"
+            />
+          </div>
+
+          <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-neutral-600 dark:text-neutral-400">
             {t.portfolio.description}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-x-10 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
+        <div className="grid grid-cols-1 gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+          {projects.map((project, index) => (
             <ProjectCard
               key={project.id}
               project={project}
-              visitText={visitText}
-              ariaLabel={buildAriaLabel(project.title)}
+              index={index}
+              visible={visible}
             />
           ))}
         </div>

@@ -4,6 +4,9 @@ import { useLanguage } from "../context/LanguageContext";
 import founder1 from "../assets/adama.png";
 import founder2 from "../assets/bakary.png";
 
+// Image de la section Mission (à adapter au nom de votre fichier)
+import missionImage from "../assets/mission.jpg";
+
 // Logos transparents : un pour le mode clair, un pour le mode sombre
 import partnerLogoLight from "../assets/cigogne-light.png";
 import partnerLogoDark from "../assets/cigogne-dark.png";
@@ -14,6 +17,36 @@ const LINKEDIN_URLS = [
   "https://www.linkedin.com/in/adama-kone-7a0240208/",
   "https://www.linkedin.com/in/mamadou-bakary-coulibaly/",
 ];
+
+/*
+  Textes de la section Mission.
+  Si vous ajoutez `mission` dans translations.js (t.team.mission) avec les
+  mêmes champs, ils remplaceront ces textes automatiquement.
+*/
+const MISSION_FALLBACK = {
+  fr: {
+    title: "Notre mission",
+    taglineStart: "Accompagner votre succès ",
+    taglineHighlight: "vers demain",
+    taglineEnd: ".",
+    textStart:
+      "Nous créons des solutions innovantes pour faire passer votre entreprise à la ",
+    textHighlight: "vitesse supérieure",
+    textEnd: ".",
+    imageAlt: "Notre équipe accompagne des clients autour d'un ordinateur",
+  },
+  en: {
+    title: "Our mission",
+    taglineStart: "Supporting your success ",
+    taglineHighlight: "towards tomorrow",
+    taglineEnd: ".",
+    textStart:
+      "We create innovative solutions to take your business to the ",
+    textHighlight: "next level",
+    textEnd: ".",
+    imageAlt: "Our team supporting clients around a laptop",
+  },
+};
 
 /*
   Palette tirée du logo Nieta Digital
@@ -58,6 +91,80 @@ function Photo({ src, name }) {
   );
 }
 
+/* Filet horizontal de part et d'autre d'un titre */
+function SideRule() {
+  return (
+    <span
+      className="hidden h-px w-10 bg-neutral-300 dark:bg-white/20 sm:block sm:w-14"
+      aria-hidden="true"
+    />
+  );
+}
+
+/* Petit séparateur : filet + losange orange (clin d'œil au logo) */
+function DiamondDivider() {
+  return (
+    <div
+      className="my-6 flex items-center justify-center gap-3 lg:justify-start"
+      aria-hidden="true"
+    >
+      <span className="h-px w-10 bg-neutral-300 dark:bg-white/20" />
+      <span className="h-2 w-2 rotate-45 bg-[#F7931E]" />
+      <span className="h-px w-10 bg-neutral-300 dark:bg-white/20" />
+    </div>
+  );
+}
+
+function Mission({ content }) {
+  return (
+    <div className="mx-auto mt-20 max-w-5xl overflow-hidden rounded-2xl bg-white shadow-lg shadow-black/5 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr]">
+        {/* Texte */}
+        <div className="relative z-10 flex flex-col justify-center px-6 py-10 text-center sm:px-10 lg:py-14 lg:text-left">
+          <div className="flex items-center justify-center gap-4 lg:justify-start">
+            <SideRule />
+            <h3 className="font-['Space_Grotesk'] text-2xl font-semibold tracking-tight sm:text-3xl">
+              <span className={BLUE}>{content.title}</span>
+            </h3>
+            <SideRule />
+          </div>
+
+          <p className="mt-5 text-lg leading-8 text-neutral-700 dark:text-neutral-200">
+            {content.taglineStart}
+            <span className={`font-semibold ${BLUE}`}>
+              {content.taglineHighlight}
+            </span>
+            {content.taglineEnd}
+          </p>
+
+          <DiamondDivider />
+
+          <p className="mx-auto max-w-sm text-sm leading-7 text-neutral-600 dark:text-neutral-400 lg:mx-0">
+            {content.textStart}
+            <span className={`font-semibold ${BLUE}`}>
+              {content.textHighlight}
+            </span>
+            {content.textEnd}
+          </p>
+        </div>
+
+        {/* Image : fondue vers le texte (vers le haut sur mobile, vers la gauche sur grand écran) */}
+        <div className="relative min-h-[240px] lg:min-h-[360px]">
+          <img
+            src={missionImage}
+            alt={content.imageAlt}
+            loading="lazy"
+            onError={(event) => {
+              event.currentTarget.style.display = "none";
+            }}
+            className="absolute inset-0 h-full w-full object-cover [-webkit-mask-image:linear-gradient(to_bottom,transparent,black_30%)] [mask-image:linear-gradient(to_bottom,transparent,black_30%)] lg:[-webkit-mask-image:linear-gradient(to_right,transparent,black_35%)] lg:[mask-image:linear-gradient(to_right,transparent,black_35%)]"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Team() {
   const { lang, t } = useLanguage();
 
@@ -65,6 +172,9 @@ export default function Team() {
   const [visible, setVisible] = useState(false);
 
   const members = t.team.members || [];
+
+  // Section Mission : translations.js en priorité, sinon textes par défaut
+  const mission = t.team.mission || MISSION_FALLBACK[lang] || MISSION_FALLBACK.fr;
 
   // Informations du partenaire depuis translations.js
   const partner = t.partner || {};
@@ -180,6 +290,9 @@ export default function Team() {
             </div>
           ))}
         </div>
+
+        {/* Mission */}
+        <Mission content={mission} />
 
         {/* Partenaire */}
         <div className="mx-auto mt-20 max-w-3xl text-center">

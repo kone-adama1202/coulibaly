@@ -79,6 +79,7 @@ export default function Footer() {
         <div className="mt-7 border-t border-neutral-200 pt-5 text-center text-xs dark:border-neutral-800 md:flex md:items-center md:justify-between md:text-left">
           <p>
             © {year} Nieta Digital.{" "}
+               yb9c
             {lang === "fr"
               ? "Tous droits réservés."
               : "All rights reserved."}
